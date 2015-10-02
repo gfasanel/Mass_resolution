@@ -62,6 +62,11 @@ for iEntry in range(0,nEntries):
         if endcap_endcap:
             h_mee_MC['EE'].Fill(tree.Zee_mass_HEEP[index],endcap_endcap)
 
+file_MC= ROOT.TFile('MC_Zpeak.root','RECREATE')
+file_MC.cd()
+for regions in ['BB','BE','EE']:
+    h_mee_MC[regions]. Write()
+
 #####DATA###########################################
 nEntries=tree_data.GetEntries()
 for iEntry in range(0,nEntries):
@@ -91,11 +96,9 @@ for iEntry in range(0,nEntries):
         if endcap_endcap:
             h_mee_data['EE'].Fill(tree_data.Zee_mass_HEEP[index],endcap_endcap)
 
-
-file_mass= ROOT.TFile('test.root','RECREATE')
-file_mass.cd()
+file_data= ROOT.TFile('data_Zpeak.root','RECREATE')
+file_data.cd()
 for regions in ['BB','BE','EE']:
-    h_mee_MC[regions]. Write()
     h_mee_data[regions]. Write()
 
 
