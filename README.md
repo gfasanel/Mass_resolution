@@ -6,7 +6,7 @@ python histos_for_sigma_extra.py
 
 python Zpeak_fitter.py
 
-sigma_extra_publisher.sh
+Zpeak_fitter fa una chiamata a os.system("source sigma_extra_publisher.s")
 
 
 
