@@ -35,6 +35,7 @@ for regions in ['BB','BE','EE']:
 
 ###DY MC##########################################################
 nEntries=tree.GetEntries()
+#nEntries=10000
 for iEntry in range(0,nEntries):
     if iEntry%1000==0:
         print iEntry , '/' , nEntries
@@ -62,13 +63,14 @@ for iEntry in range(0,nEntries):
         if endcap_endcap:
             h_mee_MC['EE'].Fill(tree.Zee_mass_HEEP[index],endcap_endcap)
 
-file_MC= ROOT.TFile('MC_Zpeak.root','RECREATE')
+file_MC= ROOT.TFile('Extra_sigma/MC_Zpeak.root','RECREATE')
 file_MC.cd()
 for regions in ['BB','BE','EE']:
     h_mee_MC[regions]. Write()
 
 #####DATA###########################################
 nEntries=tree_data.GetEntries()
+#nEntries=10000
 for iEntry in range(0,nEntries):
     if iEntry%1000==0:
         print iEntry , '/' , nEntries
@@ -96,7 +98,7 @@ for iEntry in range(0,nEntries):
         if endcap_endcap:
             h_mee_data['EE'].Fill(tree_data.Zee_mass_HEEP[index],endcap_endcap)
 
-file_data= ROOT.TFile('data_Zpeak.root','RECREATE')
+file_data= ROOT.TFile('Extra_sigma/data_Zpeak.root','RECREATE')
 file_data.cd()
 for regions in ['BB','BE','EE']:
     h_mee_data[regions]. Write()
