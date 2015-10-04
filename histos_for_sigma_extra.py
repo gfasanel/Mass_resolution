@@ -6,10 +6,10 @@ import os
 
 #run with python histos_for_sigma_extra.py
 ##########################################################################################
-tree      = ROOT.TChain("IIHEAnalysis")
+tree_MC   = ROOT.TChain("IIHEAnalysis")
 for file in os.listdir("/user/aidan/public/HEEP/samples/RunIISpring15DR74/RunIISpring15DR74_DYToEE_50_25ns/"):
     if file.endswith(".root"):
-        tree.Add(str("/user/aidan/public/HEEP/samples/RunIISpring15DR74/RunIISpring15DR74_DYToEE_50_25ns/"+file))
+        tree_MC.Add(str("/user/aidan/public/HEEP/samples/RunIISpring15DR74/RunIISpring15DR74_DYToEE_50_25ns/"+file))
 
 tree_data = ROOT.TChain("IIHEAnalysis")
 tree_data.Add("~aidan/public/HEEP/data2015/DoubleEG_Run2015B_GoldenLumimask.root")
@@ -25,86 +25,78 @@ hBase_mee.GetYaxis().SetTitle('entries per 1 GeV')
 
 h_mee_MC   = {}
 h_mee_data = {}
-for regions in ['BB','BE','EE']:
-    h_mee_MC[regions]   = hBase_mee.Clone('h_mee_MC_%s'%regions)
-    h_mee_data[regions] = hBase_mee.Clone('h_mee_data_%s'%regions)
 
-#HEEP_cutflow60_acceptance is true for a gsf that passes the Et and eta requirements.
-#HEEP_cutflow60_ID is true for a gsf electron that passes the acceptance and ID.
-#HEEP_cutflow60_total is true for a gsf electrons that passes all cuts.
-
-###DY MC##########################################################
-nEntries=tree.GetEntries()
-#nEntries=10000
-for iEntry in range(0,nEntries):
-    if iEntry%1000==0:
-        print iEntry , '/' , nEntries
-    tree.GetEntry(iEntry)
-    temp_mass=-999
-    index=-10
-
-    for i in range(0,len(tree.Zee_mass_HEEP)):
-        if (tree.HEEP_cutflow60_total[tree.Zee_i1[i]] and tree.HEEP_cutflow60_total[tree.Zee_i2[i]]): #if both electrons passes the full HEEP
-            if(temp_mass<tree.Zee_mass_HEEP[i]):
-                temp_mass=tree.Zee_mass_HEEP[i]
-                index=i
-
-    if (index > -10):
-        barrel_barrel=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<1.4442) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<1.4442)
-
-        barrel_endcap=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<1.4442) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<2.5) + (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<1.4442) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<2.5)
-
-        endcap_endcap=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<2.5) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<2.5)
-
-        if barrel_barrel:
-            h_mee_MC['BB'].Fill(tree.Zee_mass_HEEP[index],barrel_barrel)
-        if barrel_endcap:
-            h_mee_MC['BE'].Fill(tree.Zee_mass_HEEP[index],barrel_endcap)            
-        if endcap_endcap:
-            h_mee_MC['EE'].Fill(tree.Zee_mass_HEEP[index],endcap_endcap)
-
-file_MC= ROOT.TFile('Extra_sigma/MC_Zpeak.root','RECREATE')
-file_MC.cd()
-for regions in ['BB','BE','EE']:
-    h_mee_MC[regions]. Write()
-
-#####DATA###########################################
-nEntries=tree_data.GetEntries()
-#nEntries=10000
-for iEntry in range(0,nEntries):
-    if iEntry%1000==0:
-        print iEntry , '/' , nEntries
-    tree_data.GetEntry(iEntry)
-    temp_mass=-999
-    index=-10
-
-    for i in range(0,len(tree_data.Zee_mass_HEEP)):
-        if (tree_data.HEEP_cutflow60_total[tree_data.Zee_i1[i]] and tree_data.HEEP_cutflow60_total[tree_data.Zee_i2[i]]): #if both electrons passes the full HEEP
-            if(temp_mass<tree_data.Zee_mass_HEEP[i]):
-                temp_mass=tree_data.Zee_mass_HEEP[i]
-                index=i
-
-    if (index > -10):
-        barrel_barrel=(abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i1[index]])<1.4442) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i2[index]])<1.4442)
-
-        barrel_endcap=(abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i1[index]])<1.4442) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i2[index]])>1.566) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i2[index]])<2.5) + (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i2[index]])<1.4442) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i1[index]])>1.566) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i1[index]])<2.5)
-
-        endcap_endcap=(abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i1[index]])>1.566) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i1[index]])<2.5) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i2[index]])>1.566) * (abs(tree_data.HEEP_cutflow60_eta_value[tree_data.Zee_i2[index]])<2.5)
-
-        if barrel_barrel:
-            h_mee_data['BB'].Fill(tree_data.Zee_mass_HEEP[index],barrel_barrel)
-        if barrel_endcap:
-            h_mee_data['BE'].Fill(tree_data.Zee_mass_HEEP[index],barrel_endcap)            
-        if endcap_endcap:
-            h_mee_data['EE'].Fill(tree_data.Zee_mass_HEEP[index],endcap_endcap)
-
-file_data= ROOT.TFile('Extra_sigma/data_Zpeak.root','RECREATE')
-file_data.cd()
-for regions in ['BB','BE','EE']:
-    h_mee_data[regions]. Write()
-
-
-
-
-
-
+var_type=['MC','data']
+for var in var_type:
+	detector_regions=['BB','BE','EE','BEplus','BEminus']
+	for regions in detector_regions:
+	    h_mee_MC[regions]   = hBase_mee.Clone('h_mee_MC_%s'%regions)
+	    h_mee_data[regions] = hBase_mee.Clone('h_mee_data_%s'%regions)
+	
+	#HEEP_cutflow60_acceptance is true for a gsf that passes the Et and eta requirements.
+	#HEEP_cutflow60_ID is true for a gsf electron that passes the acceptance and ID.
+	#HEEP_cutflow60_total is true for a gsf electrons that passes all cuts.
+	
+	if var in ['MC']:
+	    tree=tree_MC
+	else:
+	    tree=tree_data
+	
+	#nEntries=tree.GetEntries()
+	nEntries=10000
+	for iEntry in range(0,nEntries):
+	    if iEntry%1000==0:
+	        print iEntry , '/' , nEntries
+	    tree.GetEntry(iEntry)
+	    temp_mass=-999
+	    index=-10
+	
+	    for i in range(0,len(tree.Zee_mass_HEEP)):
+	        if (tree.HEEP_cutflow60_total[tree.Zee_i1[i]] and tree.HEEP_cutflow60_total[tree.Zee_i2[i]]): #if both electrons passes the full HEEP
+	            if(temp_mass<tree.Zee_mass_HEEP[i]):
+	                temp_mass=tree.Zee_mass_HEEP[i]
+	                index=i
+	
+	    if (index > -10):
+	        barrel_barrel=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<1.4442) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<1.4442)
+	
+	        barrel_endcap=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<1.4442) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<2.5) + (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<1.4442) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<2.5)
+	
+	        barrel_endcap_plus=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<1.4442) * (tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]]>1.566) * (tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]]<2.5) + (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<1.4442) * (tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]]>1.566) * (tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]]<2.5)
+	
+	        endcap_endcap=(abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i1[index]])<2.5) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])>1.566) * (abs(tree.HEEP_cutflow60_eta_value[tree.Zee_i2[index]])<2.5)
+	
+	        if barrel_barrel:
+	            if var in ['MC']:
+	                h_mee_MC['BB'].Fill(tree.Zee_mass_HEEP[index],barrel_barrel)
+	            else:
+	                h_mee_data['BB'].Fill(tree.Zee_mass_HEEP[index],barrel_barrel)
+	        if barrel_endcap:
+	            if var in ['MC']:
+	                h_mee_MC['BE'].Fill(tree.Zee_mass_HEEP[index],barrel_endcap)            
+	                if barrel_endcap_plus:
+	                    h_mee_MC['BEplus'].Fill(tree.Zee_mass_HEEP[index])            
+	                else:
+	                    h_mee_MC['BEminus'].Fill(tree.Zee_mass_HEEP[index])
+	            else:
+	                h_mee_data['BE'].Fill(tree.Zee_mass_HEEP[index],barrel_endcap)            
+	                if barrel_endcap_plus:
+	                    h_mee_data['BEplus'].Fill(tree.Zee_mass_HEEP[index])            
+	                else:
+	                    h_mee_data['BEminus'].Fill(tree.Zee_mass_HEEP[index])
+	        if endcap_endcap:
+	            if var in ['MC']:
+	                h_mee_MC['EE'].Fill(tree.Zee_mass_HEEP[index],endcap_endcap)
+	            else:
+	                h_mee_data['EE'].Fill(tree.Zee_mass_HEEP[index],endcap_endcap)
+	
+	if var in ['MC']:
+	    file_MC= ROOT.TFile('Extra_sigma/MC_Zpeak.root','RECREATE')
+	    file_MC.cd()
+	    for regions in detector_regions:
+	        h_mee_MC[regions]. Write()
+	else:
+	    file_data= ROOT.TFile('Extra_sigma/data_Zpeak.root','RECREATE')
+	    file_data.cd()
+	    for regions in detector_regions:
+	        h_mee_data[regions]. Write()
