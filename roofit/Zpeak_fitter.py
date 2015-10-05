@@ -1,6 +1,7 @@
 #python Zpeak_fitter.py -t resolution
 import ROOT
 import math
+import os
 ROOT.gSystem.Load("libRooFit")
 ROOT.gSystem.Load("RooDCBShape_cxx.so") #This is the way to handle user defined pdf (generated with RooClassFactory). Compile once and for all in ROOT and then add it as a library
 from ROOT import RooFit, RooRealVar, RooGaussian, RooDataSet, RooArgList, RooTreeData, RooArgSet
@@ -19,9 +20,14 @@ for var_type in ['data','MC']:
          #file_mass=ROOT.TFile('../Extra_sigma/data_Zpeak_test.root','READ')
       hist_res   = file_mass.Get(str('h_mee_'+var_type+'_'+regions))
       max=hist_res.GetXaxis().GetBinCenter(hist_res.GetMaximumBin())
-      mean=hist_res.GetMean()
+      mean_histo=hist_res.GetMean()
       print "MAX AND MIN, RMS", max, min, hist_res.GetRMS()
-      x=ROOT.RooRealVar("x","m_{ee}",max-2*hist_res.GetRMS(),max+2*hist_res.GetRMS())
+      #x=ROOT.RooRealVar("x","m_{ee}",max-2*hist_res.GetRMS(),max+2*hist_res.GetRMS())
+      x=ROOT.RooRealVar("x","m_{ee}",60,120)#82,98
+      #This for convolution
+      x1=ROOT.RooRealVar("x1","m_{ee}",60,120)#82,98
+      x2=ROOT.RooRealVar("x2","m_{ee}",60,120)#82,98
+
       # Create a binned dataset (RooDataHist) that imports contents of TH1 and associates its contents to observable 'x'
       dh=ROOT.RooDataHist("dh","dh",RooArgList(x), hist_res)  #Without RooArgList it doesn't work
 
@@ -38,20 +44,38 @@ for var_type in ['data','MC']:
    
       mean_guessed=hist_res.GetXaxis().GetBinCenter(hist_res.GetMaximumBin())
       sigma_guessed=hist_res.GetRMS()/4.
+      #sigma_guessed=hist_res.GetRMS() #only Breit Wigner
       print "SIGMA GUESSED ",sigma_guessed
-      mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.1*sigma_guessed, mean_guessed + 0.1*sigma_guessed)
-      sigma=ROOT.RooRealVar("sigma","sigma",sigma_guessed,0.,2) 
+      mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.2*sigma_guessed, mean_guessed + 0.2*sigma_guessed)
+      sigma=ROOT.RooRealVar("sigma","sigma",sigma_guessed,0.,4) 
+      width=ROOT.RooRealVar("width","width",sigma_guessed,0.,4) 
       alpha=ROOT.RooRealVar("alpha","alpha",0.1,0.,1.5) #after alpha*sigma, gaussian connected to power law: alpha>0 => left tail alpha<0 => right tail
-      alphaR=ROOT.RooRealVar("alphaR","alphaR",-0.1,-0.,-1.5) #after alpha*sigma, gaussian connected to power law: alpha>0 => left tail alpha<0 => right tail
-      n=ROOT.RooRealVar("nL","nL",3,0.1,15) #exponent of the power law tail
-      alphaR=ROOT.RooRealVar("alphaR","alphaR",3,0.1,15)
-      nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      alphaR=ROOT.RooRealVar("alphaR","alphaR",2,0.1,15)#2 was already ~good
+      if regions in ['BB']:
+         mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
+         n=ROOT.RooRealVar("nL","nL",2,0.1,15) #exponent of the power law tail
+         nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      elif var_type in ['MC'] and regions in ['EE']:
+         mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
+         n=ROOT.RooRealVar("nL","nL",2,0.1,15) 
+         nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      elif var_type in ['MC'] and regions in ['BE']:
+         mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.2*sigma_guessed, mean_guessed + 0.2*sigma_guessed)
+         n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
+         nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      else :
+         mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
+         n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
+         nR=ROOT.RooRealVar("nR","nR",4,0.1,10)
+
 
       #RooAbsPdf *fit_func = new RooCBShape("fit_func", "crystal ball", x,mean,sigma,alpha,n) #This way works in C++
       #Python version
       #fit_func=ROOT.RooCBShape("fit_func", "crystal ball", x,mean,sigma,alpha,n) 
       fit_func=ROOT.RooDCBShape("dfit_func", "double crystal ball", x, mean, sigma, alpha, alphaR, n, nR)
       #fit_func=ROOT.RooGaussian("fit_func","gaussian",x, mean, sigma)
+      #fit_func=ROOT.RooBreitWigner("dfit_func", "breit wigner", x, mean, sigma)
+      #fit_func=ROOT.RooVoigtian("dfit_func", "voigtian (convolution gauss*breit wigner", x, mean,width, sigma)
       fit_func.fitTo(dh)
 
       res=fit_func.fitTo(dh,RooFit.Save()) #This is the general way of handling fit results
@@ -101,7 +125,8 @@ for var_type in ['data','MC']:
       #   file_res_BB.write("%lf %lf %lf %lf\n"%( mean_fit, sigma_fit, mean_fit_error, sigma_fit_error))
       #elif regions=='BE':
       #elif regions=='EE':
-              
+
+os.system("source ./sigma_extra_publisher.sh")              
 
 
 
