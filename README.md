@@ -4,10 +4,16 @@
 **Sigma extra**
 python histos_for_sigma_extra.py
 
+The histograms are sabed in Mass_resolution/Extra_sigma/
+cd roofit/
+
 python Zpeak_fitter.py
 
-Zpeak_fitter fa una chiamata a os.system("source sigma_extra_publisher.s")
+Zpeak_fitter fa una chiamata a os.system("source sigma_extra_publisher.sh")
 
+Per scrivere tutto su table
+
+Extra_sigma/sigma_extra.py
 
 
 **In practice you do this**
