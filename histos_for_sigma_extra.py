@@ -19,7 +19,7 @@ tree_data.Add("~aidan/public/HEEP/data2015/DoubleEG_Run2015D_GoldenLumimask.root
 ##########################################################################################
 #                                 Declare and fill histograms
 ##########################################################################################
-hBase_mee = ROOT.TH1F('hBase_mee', '', 60, 60, 120)
+hBase_mee = ROOT.TH1F('hBase_mee', '', 400, 0, 200)#Normally, we fit from 60-120
 hBase_mee.GetXaxis().SetTitle('m(ee) [GeV]')
 hBase_mee.GetYaxis().SetTitle('entries per 1 GeV')
 
@@ -32,7 +32,8 @@ for var in var_type:
 	for regions in detector_regions:
 	    h_mee_MC[regions]   = hBase_mee.Clone('h_mee_MC_%s'%regions)
 	    h_mee_data[regions] = hBase_mee.Clone('h_mee_data_%s'%regions)
-	
+            h_mee_MC[regions].Sumw2()            
+            h_mee_data[regions].Sumw2()
 	#HEEP_cutflow60_acceptance is true for a gsf that passes the Et and eta requirements.
 	#HEEP_cutflow60_ID is true for a gsf electron that passes the acceptance and ID.
 	#HEEP_cutflow60_total is true for a gsf electrons that passes all cuts.
@@ -42,8 +43,8 @@ for var in var_type:
 	else:
 	    tree=tree_data
 	
-	#nEntries=tree.GetEntries()
-	nEntries=10000
+	nEntries=tree.GetEntries()
+	#nEntries=10000 # just for quick tests
 	for iEntry in range(0,nEntries):
 	    if iEntry%1000==0:
 	        print iEntry , '/' , nEntries
