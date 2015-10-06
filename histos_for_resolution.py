@@ -1,20 +1,14 @@
 #! /usr/bin/python
 
 ##########################################################################################
-# HISTOGRAMS MAKER FOR HEEP#
+# HISTOGRAMS MAKER FOR HEEP RESOLUTION (MC only)#
 ##########################################################################################
-# (c) 2015 Aidan Randle-Conde (ULB), Giuseppe Fasanella (ULB)                            #
-# Contact: aidan.randleconde@gmail.com, giuseppe.fasanella.cern.ch                       #
+# Giuseppe Fasanella (ULB)     
 ##########################################################################################
 
 import math
 from array import array
-
-##########################################################################################
-#                                  Settings for the job                                  #
-##########################################################################################
-sname = 'ZprimeToEE_M5000_20bx25'
-
+import os
 ##########################################################################################
 #                             Import ROOT and apply settings                             #
 ##########################################################################################
@@ -24,24 +18,34 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 
 
 ##########
-samples_path='/user/gfasanel/public/HEEP_samples/'
-tree= ROOT.TChain("IIHEAnalysis")
-
+#/user/aidan/public/HEEP/samples/RunIISpring15DR74/RunIISpring15DR74_DYToEE_50_25ns/
+#RunIISpring15DR74_DYToEE_100_200_25ns
+#RunIISpring15DR74_DYToEE_200_400_25ns
+#RunIISpring15DR74_DYToEE_400_500_25ns
+#RunIISpring15DR74_DYToEE_500_700_25ns
+#RunIISpring15DR74_DYToEE_700_800_25ns
+#RunIISpring15DR74_DYToEE_800_1000_50ns
+#RunIISpring15DR74_DYToEE_1000_1500_25ns
+#RunIISpring15DR74_DYToEE_1500_2000_25ns
+#RunIISpring15DR74_DYToEE_2000_3000_25ns
 #Since this is just for the mass resolution you don't need to reweight the histograms
-#Keep in mind that the files' name don't match their real mass range
-
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_120_200_20bx25__120_200/outfile_PHYS14_DYToEEMM_120_200_20bx25__120_200.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_1400_2300_20bx25__3500_4500/outfile_PHYS14_DYToEEMM_1400_2300_20bx25__3500_4500.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_200_400_20bx25__1400_2300/outfile_PHYS14_DYToEEMM_200_400_20bx25__1400_2300.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_2300_3500_20bx25__400_800/outfile_PHYS14_DYToEEMM_2300_3500_20bx25__400_800.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_3500_4500_20bx25__4500_6000/outfile_PHYS14_DYToEEMM_3500_4500_20bx25__4500_6000.root')) 
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_400_800_20bx25__200_400/outfile_PHYS14_DYToEEMM_400_800_20bx25__200_400.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_4500_6000_20bx25__6000_7500/outfile_PHYS14_DYToEEMM_4500_6000_20bx25__6000_7500.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_6000_7500_20bx25__7500_8500/outfile_PHYS14_DYToEEMM_6000_7500_20bx25__7500_8500.root'))
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_7500_8500_20bx25__800_1400/outfile_PHYS14_DYToEEMM_7500_8500_20bx25__800_1400.root')) 
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_800_1400_20bx25__2300_3500/outfile_PHYS14_DYToEEMM_800_1400_20bx25__2300_3500.root')) 
-tree.Add(str(samples_path+'crab_20150128_PHYS14_DYToEEMM_8500_9500_20bx25__8500_9500/outfile_PHYS14_DYToEEMM_8500_9500_20bx25__8500_9500.root'))
-tree.Add(str('/user/gfasanel/public/HEEP_samples/crab_20150126_PHYS14_ZprimeToEE_M5000_20bx25/outfile_PHYS14_%s.root'%sname))
+samples_path='/user/aidan/public/HEEP/samples/RunIISpring15DR74/'
+tree= ROOT.TChain("IIHEAnalysis")
+samples=['RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_50_120',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_120_200',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_200_400',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_400_800',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_800_1400',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_1400_2300',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_2300_3500',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_3500_4500',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_4500_6000',
+         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_6000']
+for sample in samples:
+    print str(samples_path+sample+"/")
+    for file in os.listdir(str(samples_path+sample+"/")):
+        if file.endswith(".root"):
+            tree.Add(str(samples_path+sample+"/"+file))
 
 #################################CLASS DEFINITION###############################################
 ##########################################################################################
@@ -128,14 +132,15 @@ class gsf_electron_from_tree:
             if len(getattr(tree,var)) >index:
                 setattr(self, var, getattr(tree,var)[index])
 #tree.gsf_px[index]
-        self.p4 = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_energy)
+        #self.p4 = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_energy)
+        self.p4 = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_caloEnergy)
         self.charge = tree.gsf_charge[index]        
         self.p4_supercluster = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_superClusterEnergy)#E is superClusterEnergy
         self.p4_h_recover = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_energy + self.gsf_energy*self.gsf_hadronicOverEm)#adding the H component
         self.HoverE=self.gsf_hadronicOverEm
-        self.HEEPID = self.HEEP_cutflow50_25ns_EcalDriven and self.HEEP_cutflow50_25ns_dEtaIn and self.HEEP_cutflow50_25ns_dPhiIn and self.HEEP_cutflow50_25ns_HOverE and self.HEEP_cutflow50_25ns_SigmaIetaIeta and self.HEEP_cutflow50_25ns_E1x5OverE5x5 and self.HEEP_cutflow50_25ns_E2x5OverE5x5 and self.HEEP_cutflow50_25ns_missingHits and self.HEEP_cutflow50_25ns_dxyFirstPV and self.HEEP_cutflow50_25ns_isolEMHadDepth1 and self.HEEP_cutflow50_25ns_IsolPtTrks
-        self.HEEPAcc = self.HEEP_cutflow50_25ns_Et and self.HEEP_cutflow50_25ns_eta
-        
+        self.HEEPID  = self.HEEP_cutflow60_ID
+        self.HEEPAcc = self.HEEP_cutflow60_acceptance
+
         self.region = 'none'
         if abs(self.gsf_eta) < 1.4442:
             self.region =  'barrel'
@@ -248,7 +253,7 @@ for regions in ['BB','BE','EE']:
 ##########################################################################################
 DeltaRCut = 0.15
 nEventsWithEE = 0
-#nEntries = 1000
+#nEntries = 1000 #for quick Tests
 nEntries = tree.GetEntries()
 region_fail_counter=0
 nEventsWithEE=0
@@ -364,7 +369,8 @@ print "Number of events with Neg Mass ",nEventsWithNegMass
 print "Number of events where the gen ele are reconstructed ",nEventsWithEEreco 
 print "Number of events outside the regions ",region_fail_counter
 
-file_mass= ROOT.TFile('~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root','RECREATE')
+#file_mass= ROOT.TFile('~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root','RECREATE')
+file_mass= ROOT.TFile('./Resolution/histograms_mass_res.root','RECREATE')
 file_mass.cd()
 for regions in ['BB','BE','EE']:
     for i in range(1, hBase_mee_mr.GetNbinsX()+1):# for each mass bin
@@ -385,7 +391,8 @@ hBase_mee_mr.Write()
 #This dummy histogram is used to decide the mass binning
 
 print "Check the output here"
-print "~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root"
+#print "~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root"
+print "./Resolution/histograms_mass_res.root"
 
 
 
