@@ -2,6 +2,8 @@
 import math
 import ROOT
 
+print "[STATUS] Calling Mass_resolution/Extra_sigma/sigma_extra.py to write Latex table"
+
 var_type=['data','MC']
 det_regions=['BB','BE','EE']
 
@@ -17,7 +19,7 @@ for var in var_type:
 
 for region in det_regions:
     for var in var_type:
-        with open(str('fit_extra_sigma_'+var+'_'+region+'.dat')) as file_res:
+        with open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/fit_extra_sigma_'+var+'_'+region+'.dat')) as file_res:
             for line in file_res:  #Line is a string 
                 # split the string on whitespace, return a list of numbers as strings
                 numbers_str = line.split()                               
@@ -27,5 +29,13 @@ for region in det_regions:
                 sigma[var][region]      =numbers_float[2]
                 sigma_error[var][region]=numbers_float[3]
 
+latex_table      = open('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/latex_extra_sigma.tex','w+')
+final_sigma_extra={}
 for region in det_regions:
-    print sigma['data'][region], sigma['MC'][region]
+    final_sigma_extra[region]= open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_sigma_extra_sigma_'+region+'.dat'),'w+')
+    sigma_data  = sigma['data'][region]
+    sigma_MC    = sigma['MC'][region]
+    sigma_extra = ROOT.sqrt(sigma['data'][region]*sigma['data'][region] - sigma['MC'][region]*sigma['MC'][region])
+    latex_table.write("%s %lf %lf %lf\n"%(region,sigma_data,sigma_MC,sigma_extra))
+    final_sigma_extra[region].write("%lf\n"%sigma_extra)
+                       
