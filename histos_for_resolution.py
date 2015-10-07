@@ -47,6 +47,21 @@ for sample in samples:
         if file.endswith(".root"):
             tree.Add(str(samples_path+sample+"/"+file))
 
+nEntries = tree.GetEntries()
+slot=100000
+steps=nEntries/slot
+Ranges=[]
+for step in range(0,steps + 1):
+    Ranges.append(step*slot)
+Ranges.append(nEntries)
+print "index max is ", len(Ranges) -1
+
+from optparse import OptionParser
+parser=OptionParser()
+parser.add_option("-i","--index",dest="index",default=0,type=int) #python parser option.py -i 0 => options.index is 0
+(options,args)=parser.parse_args()
+
+print "You are running in range: ",Ranges[options.index], Ranges[options.index + 1]
 #################################CLASS DEFINITION###############################################
 ##########################################################################################
 #                       Functions and classes to read from the tree                      #
@@ -254,14 +269,15 @@ for regions in ['BB','BE','EE']:
 DeltaRCut = 0.15
 nEventsWithEE = 0
 #nEntries = 1000 #for quick Tests
-nEntries = tree.GetEntries()
+#nEntries = tree.GetEntries()
 region_fail_counter=0
 nEventsWithEE=0
 nEventsWithEEreco=0
 nEventsWithNegMass=0
-
+    #print step*slot, (step+1)*slot
 print "Number of mass bins for resolution", hBase_mee_mr.GetNbinsX()
-for iEntry in range(0,nEntries):
+#for iEntry in range(0,nEntries):
+for iEntry in range(Ranges[options.index],Ranges[options.index + 1]):
     if iEntry%1000==0:
         print iEntry , '/' , nEntries
     tree.GetEntry(iEntry)
@@ -370,7 +386,7 @@ print "Number of events where the gen ele are reconstructed ",nEventsWithEEreco
 print "Number of events outside the regions ",region_fail_counter
 
 #file_mass= ROOT.TFile('~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root','RECREATE')
-file_mass= ROOT.TFile('./Resolution/histograms_mass_res.root','RECREATE')
+file_mass= ROOT.TFile('./Resolution/histograms_mass_res_'+options.index+'.root','RECREATE')
 file_mass.cd()
 for regions in ['BB','BE','EE']:
     for i in range(1, hBase_mee_mr.GetNbinsX()+1):# for each mass bin
@@ -392,7 +408,7 @@ hBase_mee_mr.Write()
 
 print "Check the output here"
 #print "~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root"
-print "./Resolution/histograms_mass_res.root"
+print "./Resolution/histograms_mass_res_*.root"
 
 
 
