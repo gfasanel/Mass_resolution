@@ -19,14 +19,11 @@ for var_type in ['data','MC']:
          file_mass=ROOT.TFile('../Extra_sigma/data_Zpeak.root','READ')
          #file_mass=ROOT.TFile('../Extra_sigma/data_Zpeak_test.root','READ')
       hist_res   = file_mass.Get(str('h_mee_'+var_type+'_'+regions))
+      hist_res.Rebin(3) #1.5 GeV binning
       max=hist_res.GetXaxis().GetBinCenter(hist_res.GetMaximumBin())
       mean_histo=hist_res.GetMean()
-      print "MAX AND MIN, RMS", max, min, hist_res.GetRMS()
-      #x=ROOT.RooRealVar("x","m_{ee}",max-2*hist_res.GetRMS(),max+2*hist_res.GetRMS())
-      x=ROOT.RooRealVar("x","m_{ee}",60,120)#82,98
-      #This for convolution
-      x1=ROOT.RooRealVar("x1","m_{ee}",60,120)#82,98
-      x2=ROOT.RooRealVar("x2","m_{ee}",60,120)#82,98
+      x=ROOT.RooRealVar("x","m_{ee} [GeV]",60,120)
+      #x=ROOT.RooRealVar("x","m_{ee} [GeV]",80,100)
 
       # Create a binned dataset (RooDataHist) that imports contents of TH1 and associates its contents to observable 'x'
       dh=ROOT.RooDataHist("dh","dh",RooArgList(x), hist_res)  #Without RooArgList it doesn't work
@@ -68,25 +65,48 @@ for var_type in ['data','MC']:
          n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
          nR=ROOT.RooRealVar("nR","nR",4,0.1,10)
 
-
-      #RooAbsPdf *fit_func = new RooCBShape("fit_func", "crystal ball", x,mean,sigma,alpha,n) #This way works in C++
-      #Python version
+      #Simple Fitting Functions
       #fit_func=ROOT.RooCBShape("fit_func", "crystal ball", x,mean,sigma,alpha,n) 
-      fit_func=ROOT.RooDCBShape("dfit_func", "double crystal ball", x, mean, sigma, alpha, alphaR, n, nR)
+      #fit_func=ROOT.RooDCBShape("fit_func", "double crystal ball", x, mean, sigma, alpha, alphaR, n, nR)##va abbastanza bene
       #fit_func=ROOT.RooGaussian("fit_func","gaussian",x, mean, sigma)
       #fit_func=ROOT.RooBreitWigner("dfit_func", "breit wigner", x, mean, sigma)
       #fit_func=ROOT.RooVoigtian("dfit_func", "voigtian (convolution gauss*breit wigner", x, mean,width, sigma)
+
+      #Convolution Fit function (BW + dCB)
+      bwMean=ROOT.RooRealVar("m_{Z}","BW Mean", 91.1876, "GeV") 
+      bwWidth=ROOT.RooRealVar("#Gamma_{Z}", "BW Width", 2.4952, "GeV") 
+      #Keep Breit-Wigner parameters fixed to the PDG values                                                                                                    
+      bwMean.setConstant(ROOT.kTRUE); 
+      bwWidth.setConstant(ROOT.kTRUE); 
+      bw=ROOT.RooBreitWigner("bw", "breit wigner", x, bwMean, bwWidth)
+
+      #mean   = ROOT.RooRealVar("mean", "Double CB Bias", -.2, -20, 20, "GeV");
+      mean      = ROOT.RooRealVar("mean", "Double CB Bias", -1., -4, 4);
+      sigma     = ROOT.RooRealVar("sigma", "Double CB Width", 2., 0.5, 4.);
+      dCBCutL   = ROOT.RooRealVar("al_{DCB}", "Double CB Cut left", 1., 0.1, 50.);
+      dCBCutR   = ROOT.RooRealVar("ar_{DCB}", "Double CB Cut right", 1., 0.1, 50.);
+      dCBPowerL = ROOT.RooRealVar("nl_{DCB}", "Double CB Power left", 2., 0.2, 50.);
+      dCBPowerR = ROOT.RooRealVar("nr_{DCB}", "Double CB Power right", 2., 0.2, 50.);
+      dcb       = ROOT.RooDCBShape("dcb", "double crystal ball", x, mean, sigma, dCBCutL, dCBCutR, dCBPowerL, dCBPowerR)
+
+      fit_func = ROOT.RooFFTConvPdf("fit_func","bw (X) dcb",x,bw,dcb)
+      
       fit_func.fitTo(dh)
 
       res=fit_func.fitTo(dh,RooFit.Save()) #This is the general way of handling fit results
-      sigma_fit=res.floatParsFinal().find("sigma").getVal()
-      sigma_fit_error=res.floatParsFinal().find("sigma").getError()
-
       mean_fit=res.floatParsFinal().find("mean").getVal()
       mean_fit_error=res.floatParsFinal().find("mean").getError()
+      sigma_fit=res.floatParsFinal().find("sigma").getVal()
+      sigma_fit_error=res.floatParsFinal().find("sigma").getError()
+      #write fit parameters on file
+      file_res = open(str('../Extra_sigma/fit_extra_sigma_'+var_type+'_'+regions+'.dat'),'w+')
+      file_res.write("%lf %lf %lf %lf\n"%(mean_fit,mean_fit_error,sigma_fit/bwMean.getVal(),sigma_fit_error/bwMean.getVal()))
 
       #Plot and save the fit
-      fit_func.plotOn(frame)
+      if var_type in ['MC']: 
+         fit_func.plotOn(frame,RooFit.LineColor(ROOT.kRed))
+      else:
+         fit_func.plotOn(frame) # default color is kBlue
       #I want to save the histogram and the fit in a file: how is it done? RooWorkSpace?? Add this later
       c = ROOT.TCanvas("fit","fit",800,800) #X length, Y length
       c.cd()
@@ -109,7 +129,8 @@ for var_type in ['data','MC']:
       cms =ROOT.TLatex(0.12,0.95,"CMS Internal")
       cms.SetNDC()
       cms.SetTextSize(0.04)
-
+      
+      #frame.SetYTitle("test") # change y title
       frame.Draw() 
       text.Draw()
       entry.Draw()
@@ -120,14 +141,10 @@ for var_type in ['data','MC']:
       c.SaveAs(str('../Extra_sigma/'+hist_res.GetName()+'.png'))
       c.SaveAs(str('../Extra_sigma/'+hist_res.GetName()+'.pdf'))
 
-      #Save Parameters (mean and sigma) in a txt file
-      #if regions=='BB':
-      #   file_res_BB.write("%lf %lf %lf %lf\n"%( mean_fit, sigma_fit, mean_fit_error, sigma_fit_error))
-      #elif regions=='BE':
-      #elif regions=='EE':
-
 os.system("source ./sigma_extra_publisher.sh")              
-
+print "python ../Extra_sigma/sigma_extra.py"
+#os.system("python ../Extra_sigma/sigma_extra.py") # Ma perche' cazzo non funziona????
+#os.system("python /user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma")
 
 
 
