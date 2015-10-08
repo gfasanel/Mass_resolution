@@ -2,9 +2,11 @@
 
 
 **Sigma extra**
+
 python histos_for_sigma_extra.py
 
 The histograms are sabed in Mass_resolution/Extra_sigma/
+
 cd roofit/
 
 python Zpeak_fitter.py
@@ -27,6 +29,8 @@ cd HEEP/CMSSW_7_2_0_patch1/src/
 source setter.sh
 
 cd Mass_resolution/
+
+source resolution_hist_setter.sh
 
 cd roofit/
 
