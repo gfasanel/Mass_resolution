@@ -386,7 +386,7 @@ print "Number of events where the gen ele are reconstructed ",nEventsWithEEreco
 print "Number of events outside the regions ",region_fail_counter
 
 #file_mass= ROOT.TFile('~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root','RECREATE')
-file_mass= ROOT.TFile('./Resolution/histograms_mass_res_'+options.index+'.root','RECREATE')
+file_mass= ROOT.TFile('./Resolution/histograms_mass_res_'+str(options.index)+'.root','RECREATE')
 file_mass.cd()
 for regions in ['BB','BE','EE']:
     for i in range(1, hBase_mee_mr.GetNbinsX()+1):# for each mass bin
