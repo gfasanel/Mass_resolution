@@ -7,9 +7,22 @@ import os
 #run with python histos_for_sigma_extra.py
 ##########################################################################################
 tree_MC   = ROOT.TChain("IIHEAnalysis")
-for file in os.listdir("/user/aidan/public/HEEP/samples/RunIISpring15DR74/RunIISpring15DR74_DYToEE_50_25ns/"):
-    if file.endswith(".root"):
-        tree_MC.Add(str("/user/aidan/public/HEEP/samples/RunIISpring15DR74/RunIISpring15DR74_DYToEE_50_25ns/"+file))
+samples_path='/user/aidan/public/HEEP/samples/RunIISpring15DR74/'
+samples=['RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_50_120']#,
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_120_200',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_200_400',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_400_800',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_800_1400',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_1400_2300',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_2300_3500',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_3500_4500',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_4500_6000',
+#         'RunIISpring15DR74_ZToEE_NNPDF30_13TeV-powheg_6000']
+for sample in samples:
+    print str(samples_path+sample+"/")
+    for file in os.listdir(str(samples_path+sample+"/")):
+        if file.endswith(".root"):
+            tree_MC.Add(str(samples_path+sample+"/"+file))
 
 tree_data = ROOT.TChain("IIHEAnalysis")
 tree_data.Add("~aidan/public/HEEP/data2015/DoubleEG_Run2015B_GoldenLumimask.root")
