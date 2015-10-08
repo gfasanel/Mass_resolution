@@ -32,10 +32,13 @@ for region in det_regions:
 latex_table      = open('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/latex_extra_sigma.tex','w+')
 final_sigma_extra={}
 for region in det_regions:
-    final_sigma_extra[region]= open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_sigma_extra_sigma_'+region+'.dat'),'w+')
-    sigma_data  = sigma['data'][region]
-    sigma_MC    = sigma['MC'][region]
-    sigma_extra = ROOT.sqrt(sigma['data'][region]*sigma['data'][region] - sigma['MC'][region]*sigma['MC'][region])
-    latex_table.write("%s %lf %lf %lf\n"%(region,sigma_data,sigma_MC,sigma_extra))
-    final_sigma_extra[region].write("%lf\n"%sigma_extra)
+    final_sigma_extra[region]= open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_extra_sigma_'+region+'.dat'),'w+')
+    sigma_data        = sigma['data'][region]
+    sigma_data_error  = sigma_error['data'][region]
+    sigma_MC          = sigma['MC'][region]
+    sigma_MC_error    = sigma_error['MC'][region]
+    sigma_extra       = ROOT.sqrt(sigma['data'][region]*sigma['data'][region] - sigma['MC'][region]*sigma['MC'][region])
+    sigma_extra_error = ROOT.sqrt(ROOT.pow(sigma_data*sigma_data_error/sigma_extra,2) + ROOT.pow(sigma_MC*sigma_MC_error/sigma_extra,2)) 
+    latex_table.write("%s %lf %lf %lf %lf %lf %lf \n"%(region,sigma_data,sigma_data_error,sigma_MC,sigma_MC_error,sigma_extra,sigma_extra_error))
+    final_sigma_extra[region].write("%lf %lf\n"%(sigma_extra,sigma_extra_error))
                        

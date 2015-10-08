@@ -9,7 +9,7 @@
 
 import math
 from array import array
-
+import os
 ##########################################################################################
 #                             Import ROOT and apply settings                             #
 ##########################################################################################
@@ -88,8 +88,25 @@ for regions in Regions:
             ##numbers_float = [float(x) for x in numbers_str]  #map(float,numbers_str) works too
             mass[regions].append(numbers_float[0])
             mass_err[regions].append(0)#for the moment
-            res[regions].append(numbers_float[1])
-            res_err[regions].append(numbers_float[2])
+            if variable_type in ['resolution']: # you have the extra sigma to add in quadrature
+               #res[regions].append(numbers_float[1]) # MC only
+               #res_err[regions].append(numbers_float[2])
+               print "[STATUS] Adding extra sigma for resolution"
+               with open(str('Extra_sigma/final_extra_sigma_'+regions+'.dat')) as file_extra_sigma:
+                  for line in file_extra_sigma:
+                     # split the string on whitespace, return a list of numbers as strings
+                     sigmas_str = line.split()  
+                     sigmas_float = map(float, line.split())
+                     extra_sigma=sigmas_float[0]
+                     extra_sigma_error=sigmas_float[1]
+
+               final_sigma      =ROOT.sqrt(extra_sigma*extra_sigma + numbers_float[1]*numbers_float[1])
+               final_sigma_error=ROOT.sqrt(ROOT.pow(extra_sigma*extra_sigma_error/final_sigma,2) + pow(numbers_float[1]*numbers_float[2]/final_sigma,2))
+               if regions in ['BB']:
+                  print final_sigma, final_sigma_error, extra_sigma, extra_sigma_error, extra_sigma*extra_sigma_error/final_sigma
+               res[regions].append(final_sigma*100) # To be in percentage
+               res_err[regions].append(final_sigma_error*100)
+
 
 #usage of array for TGraph, otherwise it doesn't work
 mass_array={}
@@ -162,9 +179,14 @@ for regions in Regions:
        canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
        canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
        canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
+
+       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'.png'))
+       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'.pdf'))
+       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'.eps'))
     else:
        canvas[regions].Print(str('roofit/fit_results/'+variable_type+'_'+regions+'.png'))
        canvas[regions].Print(str('roofit/fit_results/'+variable_type+'_'+regions+'.pdf'))
        canvas[regions].Print(str('roofit/fit_results/'+variable_type+'_'+regions+'.eps'))
 
 
+os.system("source roofit/final_fit_publisher.sh")
