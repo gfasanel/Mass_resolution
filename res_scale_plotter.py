@@ -79,8 +79,8 @@ Regions=['BB','BE','EE']
 
 #opern the file and take the numbers
 for regions in Regions:
-    with open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+variable_type+'_'+regions+'.txt')) as file_res:
-        print str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+variable_type+'_'+regions+'.txt')
+    with open(str('Resolution/histograms_mass_'+variable_type+'_'+regions+'.txt')) as file_res:
+        print str('Resolution/histograms_mass_'+variable_type+'_'+regions+'.txt')
         for line in file_res:  #Line is a string       #split the string on whitespace, return a list of numbers
             # (as strings)                                                                               
             numbers_str = line.split()    #convert numbers to floats   
@@ -127,7 +127,7 @@ canvas['BB']=ROOT.TCanvas(str(variable_type+"_BB"),str(variable_type+"_BB"))
 canvas['BE']=ROOT.TCanvas(str(variable_type+"_BE"),str(variable_type+"_BE"))
 canvas['EE']=ROOT.TCanvas(str(variable_type+"_EE"),str(variable_type+"_EE"))
 
-file_out= ROOT.TFile(str("~gfasanel/public/HEEP/Eff_plots/"+variable_type+"_plot.root"),"RECREATE")
+file_out= ROOT.TFile(str("Resolution/"+variable_type+"_plot.root"),"RECREATE")
 
 file_out.cd()
 for regions in Regions:
@@ -172,21 +172,21 @@ for regions in Regions:
 
     canvas[regions].Write()
     if "scale" in variable_type:
-       canvas[regions].Print(str('roofit/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('roofit/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('roofit/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('Resolution/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('Resolution/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('Resolution/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.eps'))
     elif "resolution" in variable_type:
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
 
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'.png'))
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'.pdf'))
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'.eps'))
+       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'.png'))
+       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'.pdf'))
+       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'.eps'))
     else:
-       canvas[regions].Print(str('roofit/fit_results/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('roofit/fit_results/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('roofit/fit_results/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('Resolution/fit_results/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('Resolution/fit_results/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('Resolution/fit_results/'+variable_type+'_'+regions+'.eps'))
 
 
-os.system("source roofit/final_fit_publisher.sh")
+os.system("source Resolution/fit_publisher.sh")

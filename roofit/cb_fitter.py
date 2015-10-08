@@ -28,7 +28,7 @@ if __name__ == "__main__":
    main(sys.argv[1:]) #argument 0 is the name of the file.py, so let's start from the second one
 
 ###################Take the histograms#################
-file_mass=ROOT.TFile('~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root','READ')
+file_mass=ROOT.TFile('../Resolution/histograms_mass_res.root','READ')
 
 if(_t=='resolution'):
     var_type= 'resolution'
@@ -48,14 +48,14 @@ if(_t=='scale_HoE_cut'):
     var_type= 'scale_HoE_cut'
 
 if('res' in var_type): #if var_type contains the substring 'res'
-   file_res_BB = open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+var_type+'_BB.txt'),'w+') #if you use ~gfasanel it doesn't work      
-   file_res_BE = open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+var_type+'_BE.txt'),'w+') #if you use ~gfasanel it doesn't work      
-   file_res_EE = open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+var_type+'_EE.txt'),'w+') #if you use ~gfasanel it doesn't work      
+   file_res_BB = open(str('../Resolution/histograms_mass_'+var_type+'_BB.txt'),'w+') #if you use ~gfasanel it doesn't work      
+   file_res_BE = open(str('../Resolution/histograms_mass_'+var_type+'_BE.txt'),'w+') #if you use ~gfasanel it doesn't work      
+   file_res_EE = open(str('../Resolution/histograms_mass_'+var_type+'_EE.txt'),'w+') #if you use ~gfasanel it doesn't work      
 
 if('scale' in var_type):
-   file_scale_BB = open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+var_type+'_BB.txt'),'w+') #if you use ~gfasanel it doesn't work  
-   file_scale_BE = open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+var_type+'_BE.txt'),'w+') #if you use ~gfasanel it doesn't work  
-   file_scale_EE = open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+var_type+'_EE.txt'),'w+') #if you use ~gfasanel it doesn't work  
+   file_scale_BB = open(str('../Resolution/histograms_mass_'+var_type+'_BB.txt'),'w+') #if you use ~gfasanel it doesn't work  
+   file_scale_BE = open(str('../Resolution/histograms_mass_'+var_type+'_BE.txt'),'w+') #if you use ~gfasanel it doesn't work  
+   file_scale_EE = open(str('../Resolution/histograms_mass_'+var_type+'_EE.txt'),'w+') #if you use ~gfasanel it doesn't work  
 
 hBase_mee_mr = file_mass.Get('hBase_mee_mr') #Taken from the file, binning decided in histos_.py
 
@@ -186,12 +186,12 @@ for regions in ['BB','BE','EE']:
         cms.Draw()
 
         if("scale" in var_type): #if the substring scale is contained in var_type 
-           c.SaveAs(str('fit_results/scale_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.png'))
-           c.SaveAs(str('fit_results/scale_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.pdf'))
+           c.SaveAs(str('../Resolution/fit_results/scale_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.png'))
+           c.SaveAs(str('../Resolution/fit_results/scale_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.pdf'))
 
         if("resolution" in var_type):
-           c.SaveAs(str('fit_results/resolution_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.png'))
-           c.SaveAs(str('fit_results/resolution_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.pdf'))
+           c.SaveAs(str('../Resolution/fit_results/resolution_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.png'))
+           c.SaveAs(str('../Resolution/fit_results/resolution_'+regions+'/'+hist_res.GetName()+'_bin_'+str(binning.index(i))+'.pdf'))
 
         #Save Parameters in a txt file
         if('res' in var_type): # if var_type contains 'res'
