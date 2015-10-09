@@ -1,19 +1,18 @@
 ### Mass_resolution
 
-
 **Sigma extra**
 
 python histos_for_sigma_extra.py
 
-The histograms are sabed in Mass_resolution/Extra_sigma/
+The histograms are saved in Mass_resolution/Extra_sigma/
 
 cd roofit/
 
 python Zpeak_fitter.py
 
-Zpeak_fitter fa una chiamata a os.system("source sigma_extra_publisher.sh")
+Zpeak_fitter fa una chiamata a os.system("source ./sigma_extra_publisher.sh")
 
-Per scrivere tutto su table
+Per scrivere tutto su table per latex
 
 Extra_sigma/sigma_extra.py
 

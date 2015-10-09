@@ -39,31 +39,31 @@ for var_type in ['data','MC']:
    
       dh.plotOn(frame)  
    
-      mean_guessed=hist_res.GetXaxis().GetBinCenter(hist_res.GetMaximumBin())
-      sigma_guessed=hist_res.GetRMS()/4.
-      #sigma_guessed=hist_res.GetRMS() #only Breit Wigner
-      print "SIGMA GUESSED ",sigma_guessed
-      mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.2*sigma_guessed, mean_guessed + 0.2*sigma_guessed)
-      sigma=ROOT.RooRealVar("sigma","sigma",sigma_guessed,0.,4) 
-      width=ROOT.RooRealVar("width","width",sigma_guessed,0.,4) 
-      alpha=ROOT.RooRealVar("alpha","alpha",0.1,0.,1.5) #after alpha*sigma, gaussian connected to power law: alpha>0 => left tail alpha<0 => right tail
-      alphaR=ROOT.RooRealVar("alphaR","alphaR",2,0.1,15)#2 was already ~good
-      if regions in ['BB']:
-         mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
-         n=ROOT.RooRealVar("nL","nL",2,0.1,15) #exponent of the power law tail
-         nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
-      elif var_type in ['MC'] and regions in ['EE']:
-         mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
-         n=ROOT.RooRealVar("nL","nL",2,0.1,15) 
-         nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
-      elif var_type in ['MC'] and regions in ['BE']:
-         mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.2*sigma_guessed, mean_guessed + 0.2*sigma_guessed)
-         n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
-         nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
-      else :
-         mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
-         n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
-         nR=ROOT.RooRealVar("nR","nR",4,0.1,10)
+      #mean_guessed=hist_res.GetXaxis().GetBinCenter(hist_res.GetMaximumBin())
+      #sigma_guessed=hist_res.GetRMS()/4.
+      ##sigma_guessed=hist_res.GetRMS() #only Breit Wigner
+      #print "SIGMA GUESSED ",sigma_guessed
+      #mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.2*sigma_guessed, mean_guessed + 0.2*sigma_guessed)
+      #sigma=ROOT.RooRealVar("sigma","sigma",sigma_guessed,0.,4) 
+      #width=ROOT.RooRealVar("width","width",sigma_guessed,0.,4) 
+      #alpha=ROOT.RooRealVar("alpha","alpha",0.1,0.,1.5) #after alpha*sigma, gaussian connected to power law: alpha>0 => left tail alpha<0 => right tail
+      #alphaR=ROOT.RooRealVar("alphaR","alphaR",2,0.1,15)#2 was already ~good
+      #if regions in ['BB']:
+      #   mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
+      #   n=ROOT.RooRealVar("nL","nL",2,0.1,15) #exponent of the power law tail
+      #   nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      #elif var_type in ['MC'] and regions in ['EE']:
+      #   mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
+      #   n=ROOT.RooRealVar("nL","nL",2,0.1,15) 
+      #   nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      #elif var_type in ['MC'] and regions in ['BE']:
+      #   mean=ROOT.RooRealVar("mean","mean",mean_guessed,mean_guessed -0.2*sigma_guessed, mean_guessed + 0.2*sigma_guessed)
+      #   n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
+      #   nR=ROOT.RooRealVar("nR","nR",3,0.1,10)
+      #else :
+      #   mean=ROOT.RooRealVar("mean","mean",mean_histo,mean_histo -0.2*sigma_guessed, mean_histo + 0.2*sigma_guessed)
+      #   n=ROOT.RooRealVar("nL","nL",3,0.1,15) 
+      #   nR=ROOT.RooRealVar("nR","nR",4,0.1,10)
 
       #Simple Fitting Functions
       #fit_func=ROOT.RooCBShape("fit_func", "crystal ball", x,mean,sigma,alpha,n) 
@@ -87,6 +87,10 @@ for var_type in ['data','MC']:
       dCBCutR   = ROOT.RooRealVar("ar_{DCB}", "Double CB Cut right", 1., 0.1, 50.);
       dCBPowerL = ROOT.RooRealVar("nl_{DCB}", "Double CB Power left", 2., 0.2, 50.);
       dCBPowerR = ROOT.RooRealVar("nr_{DCB}", "Double CB Power right", 2., 0.2, 50.);
+      if regions in ['BB'] and var_type in ['data']:
+         mean      = ROOT.RooRealVar("mean", "Double CB Bias", 0.3, -4, 4);
+         sigma     = ROOT.RooRealVar("sigma", "Double CB Width", 3, 0.5, 4.);
+         dCBPowerL = ROOT.RooRealVar("nl_{DCB}", "Double CB Power left", 2., 0.2, 1000.);
       dcb       = ROOT.RooDCBShape("dcb", "double crystal ball", x, mean, sigma, dCBCutL, dCBCutR, dCBPowerL, dCBPowerR)
 
       fit_func = ROOT.RooFFTConvPdf("fit_func","bw (X) dcb",x,bw,dcb)
@@ -141,13 +145,12 @@ for var_type in ['data','MC']:
       c.SaveAs(str('../Extra_sigma/'+hist_res.GetName()+'.png'))
       c.SaveAs(str('../Extra_sigma/'+hist_res.GetName()+'.pdf'))
 
+print "[STATUS] Calling python ../Extra_sigma/sigma_extra.py"
 os.system("source ./sigma_extra_publisher.sh")              
-print "python ../Extra_sigma/sigma_extra.py"
 #os.system("python ../Extra_sigma/sigma_extra.py") # Ma perche' cazzo non funziona????
 #os.system("python /user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma")
-
-
-
+print "Now, write your .txt and latex table with:"
+print "python ../Extra_sigma/sigma_extra.py"
 
 
 
