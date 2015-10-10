@@ -138,7 +138,7 @@ for regions in Regions:
     res_graph[regions].GetXaxis().SetTitleSize(0.042)
     res_graph[regions].GetXaxis().SetTitle('m_{gen} [GeV]')
     res_graph[regions].GetYaxis().SetTitleSize(0.052)
-    res_graph[regions].GetYaxis().SetTitle('#sigma_{fit}')
+    res_graph[regions].GetYaxis().SetTitle('#sqrt{#sigma_{fit}^{2} + #sigma_{extra}^{2}}')
     if variable_type=='HoverE':
         res_graph[regions].GetYaxis().SetTitle('mean(H_{1}/E_{1} + H_{2}/E_{2})')
     if variable_type=='HTotoverETot':
@@ -150,6 +150,9 @@ for regions in Regions:
     res_graph[regions].Draw("APE")
     if variable_type=="resolution":
        print "fitting resolution in mode ",regions
+       res_graph[regions].GetYaxis().SetRangeUser(1.,4.)
+       if regions in ['EE']:
+          res_graph[regions].GetYaxis().SetRangeUser(1.,5.5)
        x1=res_graph[regions].GetXaxis().GetBinLowEdge(res_graph[regions].GetXaxis().GetFirst())
        x2=res_graph[regions].GetXaxis().GetBinUpEdge(res_graph[regions].GetXaxis().GetLast())
        func=ROOT.TF1("func","sqrt([0]*[0]/x + ([1]*[1])/(x*x) + [2]*[2]) + [3]*x",x1,x2)
@@ -159,7 +162,7 @@ for regions in Regions:
        label_fit.SetNDC()
        label_fit.SetTextSize(0.04)
        label_fit.DrawLatex(0.3,0.8,"#sqrt{#frac{S^{2}}{m_{gen}} + #frac{N^{2}}{m_{gen}^{2}} + C^{2}} + Lm_{gen}")
-       label_fit.DrawLatex(0.3,0.7,"#chi^{2}/ndof=%.2lf"%(func.GetChisquare()/func.GetNDF()))
+       #label_fit.DrawLatex(0.3,0.7,"#chi^{2}/ndof=%.2lf"%(func.GetChisquare()/func.GetNDF()))
        label_fit.DrawLatex(0.3,0.65,"S=%.3lf #pm %.3lf"%(func.GetParameter(0),func.GetParError(0)))
        label_fit.DrawLatex(0.3,0.6,"N=%.2lf #pm %.2lf"%(func.GetParameter(1),func.GetParError(1)))
        label_fit.DrawLatex(0.3,0.55,"C=%.4lf #pm %.4lf"%(func.GetParameter(2),func.GetParError(2)))
@@ -172,21 +175,21 @@ for regions in Regions:
 
     canvas[regions].Write()
     if "scale" in variable_type:
-       canvas[regions].Print(str('Resolution/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('Resolution/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('Resolution/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'.eps'))
     elif "resolution" in variable_type:
-       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
 
-       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'.png'))
-       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'.pdf'))
-       canvas[regions].Print(str('Resolution/fit_results/resolution_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'.eps'))
     else:
-       canvas[regions].Print(str('Resolution/fit_results/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('Resolution/fit_results/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('Resolution/fit_results/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/'+variable_type+'_'+regions+'.eps'))
 
 
-os.system("source Resolution/fit_publisher.sh")
+#os.system("source Resolution/fit_publisher.sh") for lxplus web page

@@ -1,33 +1,30 @@
 ### Mass_resolution
 
-**Sigma extra**
+cd Mass_resolution_study/ (link simbolico)
 
-python histos_for_sigma_extra.py
+source setter.sh (setta root e cmsenv)
+
+**1) Sigma extra calculation**
+
+`python histos_for_sigma_extra.py`
 
 The histograms are saved in Mass_resolution/Extra_sigma/
 
-cd roofit/
+`cd roofit/`
 
-python Zpeak_fitter.py
+NOTA CHE Hai bisogno di caricare qualche libreria per poter utilizzare ROOFit correttamente,
+
+io lo faccio con un rootlogon messo nella cartella roofit
+
+`python Zpeak_fitter.py > debug.txt`
 
 Zpeak_fitter fa una chiamata a os.system("source ./sigma_extra_publisher.sh")
 
 Per scrivere tutto su table per latex
 
-Extra_sigma/sigma_extra.py
+python `../Extra_sigma/sigma_extra.py`
 
-
-**In practice you do this**
-
-remote_dir_mount
-
-sshm6
-
-cd HEEP/CMSSW_7_2_0_patch1/src/
-
-source setter.sh
-
-cd Mass_resolution/
+**2) Risoluzione MC only**
 
 source resolution_hist_setter.sh
 
@@ -69,32 +66,17 @@ python res_scale_plotter.py -t HoverE
 
 python res_scale_plotter.py -t HTotoverETot
 
-cd roofit/
 
-source fit_publisher.sh
+__________________________________________________________________________
+remote_dir_mount
 
-cd ../
+sshfs gfasanel@m6.iihe.ac.be:/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/roofit/fit_results Scrivania/remote_dir
+
+(per smontare) sudo umount /home/gfasanel/Scrivania/remote_dir
 
 remote_dir_umount
 
 
-
-************SPIEGAZIONE********************************************
-
-
-
-***************************************
-Montare la cartella remota in locale:
-sshfs gfasanel@m6.iihe.ac.be:/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/roofit/fit_results Scrivania/remote_dir
-(per smontare) sudo umount /home/gfasanel/Scrivania/remote_dir
-*********************************************
-
-cd HEEP/CMSSW_7_2_0_patch1/src/
-source setter.sh
-cd Mass_resolution/
-
-NOTA CHE Hai bisogno di caricare qualche libreria per poter utilizzare ROOFit correttamente,
-io lo faccio con un rootlogon messo nella cartella roofit
 **********************************************
 ISTROGRAMMI
 python histos_for_resolution.py
