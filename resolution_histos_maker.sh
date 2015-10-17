@@ -21,5 +21,4 @@ python histos_for_resolution.py -i 18
 python histos_for_resolution.py -i 20
 python histos_for_resolution.py -i 21
 python histos_for_resolution.py -i 22
-#python histos_for_resolution.py -i 23
 hadd -f Resolution/histograms_mass_res.root  Resolution/histograms_mass_res_*.root
