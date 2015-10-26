@@ -18,15 +18,17 @@ io lo faccio con un rootlogon messo nella cartella roofit
 
 `python Zpeak_fitter.py > debug.txt`
 
-Zpeak_fitter fa una chiamata a os.system("source ./sigma_extra_publisher.sh")
-
-Per scrivere tutto su table per latex
+Per scrivere tutto su una tabella latex
 
 python `../Extra_sigma/sigma_extra.py`
 
 **2) Risoluzione MC only**
 
-source resolution_hist_setter.sh
+#source resolution_histos_maker.sh
+
+# in directsubmission/ source submit_all.sh
+
+#python histos_for_resolution -i xxx
 
 cd roofit/
 
