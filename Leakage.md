@@ -10,9 +10,12 @@ python res_scale_plotter.py -t HoverE_lowEta
 python res_scale_plotter.py -t HoverE_highEta
 python res_scale_plotter.py -t HTotoverETot_lowEta
 python res_scale_plotter.py -t HTotoverETot_highEta
-root roofit/rootlogon_style.C Resolution/histograms_mass_res.root
+
+root Resolution/histograms_mass_res.root
 HoverE_eta.Draw()
 c1.SaveAs("~/public_html/Res_scale_15/fit_results/HoverE/2D_HoverE_eta.png")
+.q
+root roofit/rootlogon_style.C Resolution/histograms_mass_res.root
 eta_eleBarrel_BE.DrawNormalized()
 eta_eleBarrel_BB.SetLineColor(kRed)
 eta_eleBarrel_BB.DrawNormalized("same")
