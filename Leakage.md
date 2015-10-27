@@ -28,5 +28,6 @@ leg->AddEntry(eta_eleBarrel_BB,"electron #eta for BB","ep");
 leg->AddEntry(eta_eleBarrel_BE,"electron #eta for BE","ep");
 leg->Draw();
 c1.SaveAs("~/public_html/Res_scale_15/fit_results/HoverE/eta_distributions.png")
+.q
 root [9] 
 ```
