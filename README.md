@@ -1,14 +1,14 @@
 ### Mass_resolution
-
-cd Mass_resolution_study/ (link simbolico)
-
-source setter.sh (setta root e cmsenv)
+```
+cd Mass_resolution_study/ (link simbolico per HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/)
+source setter.sh #(setta root e cmsenv)
+```
 
 **1) Sigma extra calculation**
 
 `python histos_for_sigma_extra.py`
 
-The histograms are saved in Mass_resolution/Extra_sigma/
+The histograms are saved in Extra_sigma/
 
 `cd roofit/`
 
@@ -24,11 +24,11 @@ python `../Extra_sigma/sigma_extra.py`
 
 **2) Risoluzione MC only**
 
+```
 #source resolution_histos_maker.sh
-
 # in directsubmission/ source submit_all.sh
-
 #python histos_for_resolution -i xxx
+```
 
 cd roofit/
 
@@ -70,14 +70,6 @@ python res_scale_plotter.py -t HTotoverETot
 
 
 __________________________________________________________________________
-remote_dir_mount
-
-sshfs gfasanel@m6.iihe.ac.be:/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/roofit/fit_results Scrivania/remote_dir
-
-(per smontare) sudo umount /home/gfasanel/Scrivania/remote_dir
-
-remote_dir_umount
-
 
 **********************************************
 ISTROGRAMMI
@@ -89,23 +81,14 @@ root -l ~gfasanel/public/HEEP/Eff_plots/histograms_mass_res.root
 FIT
 cd roofit/
 python cb_fitter.py -t resolution (or scale)
-source fit_organizer.sh (per organizzare in cartelle)
 
 (fitta i bin a cb e scrive le sigma su file. Puoi scegliere se fare la massa con l'energia corretta o no)
 Al termine avrai dei png in fit_results/ con tutti gli istogrammi fittati e dei .txt con i risultati dei fit
 
-source fit_publisher.sh
-(questo serve a pubblicare i fit bin per bin in massa)
-emacs ~/public/HEEP/Eff_plots/histograms_mass_resolution_BB.txt
-
-cd ..
-(esci da roofit)
 
 ***********PLOT RESOLUTION/SCALE***************
 python res_scale_plotter.py -t resolution
 
-root -l ~/public/HEEP/Eff_plots/resolution_plot.root 
-root -l ~/public/HEEP/Eff_plots/scale_plot.root 
 
 ***********COMPARE PLOTS**********************
 python compare_plotter.py -t resolution
