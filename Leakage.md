@@ -1,3 +1,5 @@
+*Da Mass_resolution_Study*
+
 ```
 #resolution_histos_maker.sh
 #python histos_for_resolution.py -i 0 (Se vuoi fare un test su 100.000 entries)
@@ -8,7 +10,7 @@ python res_scale_plotter.py -t HoverE_lowEta
 python res_scale_plotter.py -t HoverE_highEta
 python res_scale_plotter.py -t HTotoverETot_lowEta
 python res_scale_plotter.py -t HTotoverETot_highEta
-root Resolution/histograms_mass_res.root
+root roofit/rootlogon_style.C Resolution/histograms_mass_res.root
 HoverE_eta.Draw()
 c1.SaveAs("~/public_html/Res_scale_15/fit_results/HoverE/2D_HoverE_eta.png")
 eta_eleBarrel_BE.DrawNormalized()
