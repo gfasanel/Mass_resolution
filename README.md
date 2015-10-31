@@ -26,6 +26,8 @@ cd ../
 **2) Risoluzione MC only**
 
 ```
+#E' commentato perche' fare gli istogrammi prende tempo: 
+#lancia questo comando solo se sei veramente sicuro
 #source resolution_histos_maker.sh
 # in ~/directsubmission/ source submit_all.sh
 #python histos_for_resolution -i xxx
@@ -38,6 +40,10 @@ python cb_fitter.py -t scale > fit_results/scale_results.txt
 cd ..
 python res_scale_plotter.py -t resolution
 python res_scale_plotter.py -t scale
+```
+
+**3) H/E check**
+```
 python HoE.py
 python res_scale_plotter.py -t HoverE
 python res_scale_plotter.py -t HTotoverETot
