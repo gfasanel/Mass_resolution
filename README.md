@@ -6,21 +6,19 @@ source setter.sh #(setta root e cmsenv)
 
 **1) Sigma extra calculation**
 
-`python histos_for_sigma_extra.py`
+```
+python histos_for_sigma_extra.py
+#The histograms are saved in Extra_sigma/
+```
 
-The histograms are saved in Extra_sigma/
-
-`cd roofit/`
-
-NOTA CHE Hai bisogno di caricare qualche libreria per poter utilizzare ROOFit correttamente,
-
-io lo faccio con un rootlogon messo nella cartella roofit
-
-`python Zpeak_fitter.py > debug.txt`
-
-Per scrivere tutto su una tabella latex
-
+```
+cd roofit/
+#nota che hai bisogno di caricare qualche libreria per poter utilizzare ROOFit correttamente,
+#io lo faccio con un rootlogon messo nella cartella roofit
+python Zpeak_fitter.py > debug.txt
+#Per scrivere tutto su una tabella latex
 python `../Extra_sigma/sigma_extra.py`
+```
 
 **2) Risoluzione MC only**
 
@@ -68,7 +66,7 @@ python res_scale_plotter.py -t HoverE
 
 python res_scale_plotter.py -t HTotoverETot
 
-
+dai una occhiata a Leakage.md
 __________________________________________________________________________
 
 **********************************************
