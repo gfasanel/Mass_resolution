@@ -18,6 +18,7 @@ cd roofit/
 python Zpeak_fitter.py > debug.txt
 #Per scrivere tutto su una tabella latex
 python ../Extra_sigma/sigma_extra.py
+cd ../
 ```
 
 **2) Risoluzione MC only**
