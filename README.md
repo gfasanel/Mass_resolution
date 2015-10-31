@@ -7,7 +7,9 @@ source setter.sh #(setta root e cmsenv)
 **1) Sigma extra calculation**
 
 ```
-python histos_for_sigma_extra.py
+#E' commentato perche' fare gli istogrammi prende tempo: 
+#lancia questo comando solo se sei veramente sicuro
+#python histos_for_sigma_extra.py
 #The histograms are saved in Extra_sigma/
 ```
 
