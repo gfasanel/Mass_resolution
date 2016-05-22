@@ -4,6 +4,11 @@ cd Mass_resolution_study/ (link simbolico per HEEP/CMSSW_7_2_0_patch1/src/Mass_r
 source setter.sh #(setta root e cmsenv)
 ```
 
+**0) Get the name of the variables**
+```
+python Dumper.py > tree_content_2016.log
+```
+
 **1) Sigma extra calculation**
 
 ```
