@@ -27,7 +27,10 @@ python Zpeak_fitter.py > debug.txt
 #Per scrivere tutto su una tabella latex
 python ../Extra_sigma/sigma_extra.py
 cd ../
+
+Use tex on web to quickly generate your latex table
 ```
+https://tex.mendelu.cz/en/
 
 **2) Risoluzione MC only**
 
