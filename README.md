@@ -4,12 +4,18 @@ cd Mass_resolution_study/ (link simbolico per HEEP/CMSSW_7_2_0_patch1/src/Mass_r
 source setter.sh #(setta root e cmsenv)
 ```
 
+**0) Get the name of the variables**
+```
+python Dumper.py > tree_content_2016.log
+```
+
 **1) Sigma extra calculation**
 
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
 #lancia questo comando solo se sei veramente sicuro
 #python histos_for_sigma_extra.py
+#python histos_for_sigma_extra_newID.py
 #The histograms are saved in Extra_sigma/
 ```
 
@@ -21,7 +27,10 @@ python Zpeak_fitter.py > debug.txt
 #Per scrivere tutto su una tabella latex
 python ../Extra_sigma/sigma_extra.py
 cd ../
+
+Use tex on web to quickly generate your latex table
 ```
+https://tex.mendelu.cz/en/
 
 **2) Risoluzione MC only**
 
