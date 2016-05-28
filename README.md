@@ -42,6 +42,14 @@ python res_scale_plotter.py -t resolution
 python res_scale_plotter.py -t scale
 ```
 
+**2+) Con e senza SC corrections
+```
+python cb_fitter.py -t res_SC > fit_results/resolution_results.txt
+python compare_plotter.py -t resolution
+python compare_plotter.py -t scale
+
+```
+
 **3) H/E check**
 ```
 python HoE.py
@@ -60,8 +68,6 @@ python res_scale_plotter.py -t resolution_supercluster
 python res_scale_plotter.py -t scale_supercluster
 python res_scale_plotter.py -t resolution_h_recover
 python res_scale_plotter.py -t scale_h_recover
-python compare_plotter.py -t resolution
-python compare_plotter.py -t scale
 ```
 
 
