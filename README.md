@@ -36,10 +36,13 @@ https://tex.mendelu.cz/en/
 
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
+#quick test: python histos_for_resolution -i 0
 #lancia questo comando solo se sei veramente sicuro
-#source resolution_histos_maker.sh
-# in ~/directsubmission/ source submit_all.sh
+# in ~/directsubmissiontest: source submit_all.sh
 #python histos_for_resolution -i xxx
+#source ~/directsubmissiontest/checker.sh
+
+#source resolution_histos_maker.sh #hadd all jobs together
 ```
 
 ```
