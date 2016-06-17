@@ -5,8 +5,8 @@ import ROOT
 print "[STATUS] Calling Mass_resolution/Extra_sigma/sigma_extra.py to write Latex table"
 
 var_type=['data','MC']
-det_regions=['BB','BE','EE']
-
+#det_regions=['BB','BE','EE']
+det_regions=['BB','BE']
 mean       ={}
 mean_error ={}
 sigma      ={}
@@ -21,7 +21,7 @@ for var in var_type:
 
 for region in det_regions:
     for var in var_type:
-        with open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/fit_extra_sigma_'+var+'_'+region+'.dat')) as file_res:
+        with open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/fit_extra_sigma_2016_'+var+'_'+region+'.dat')) as file_res:
             for line in file_res:  #Line is a string 
                 # split the string on whitespace, return a list of numbers as strings
                 numbers_str = line.split()                               
@@ -32,7 +32,7 @@ for region in det_regions:
                 sigma_error[var][region]=numbers_float[3]
                 sigma_eff[var][region]  =numbers_float[4]
 
-latex_table      = open('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/latex_extra_sigma.tex','w+')
+latex_table      = open('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/latex_extra_sigma_2016.tex','w+')
 final_sigma_extra={}
 #error: if Q=sqrt(a2 + b2), Error(Q)=sqrt( (a/Q)^2 * Err(a) + (b/Q)^2 * Err(b) )
 
@@ -45,8 +45,11 @@ latex_table.write("Category & $\sigma_{data}$ [\%] & $\sigma_{MC}$ [\%] & $\sigm
 #      BE & 2.84 & 2.27 & 1.699\\
 #      EE & 3.25 & 2.0  & 2.504\\
 
+print "File is /user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/latex_extra_sigma_2016.tex"
+
 for region in det_regions:
-    final_sigma_extra[region]= open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_extra_sigma_'+region+'.dat'),'w+')
+    #print "File is ",str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_extra_sigma_2016_'+region+'.dat')
+    final_sigma_extra[region]= open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_extra_sigma_2016_'+region+'.dat'),'w+')
     sigma_data        = sigma['data'][region]
     sigma_data_error  = sigma_error['data'][region]
     sigma_MC          = sigma['MC'][region]
@@ -62,6 +65,6 @@ for region in det_regions:
 
 latex_table.write("\\hline\n")
 latex_table.write("\\end{tabular}\n")
-latex_table.write("\\caption{Results per category}\n")
+latex_table.write("\\caption{Results per category for the $\sigma_{extra}$ parameter. \label{tab:extra}} \n")
 latex_table.write("\\end{center}\n")
 latex_table.write("\\end{table}\n")                       
