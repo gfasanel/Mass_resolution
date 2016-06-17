@@ -48,7 +48,7 @@ https://tex.mendelu.cz/en/
 ```
 cd roofit/
 python cb_fitter.py -t resolution > fit_results/resolution_results.txt
-python cb_fitter.py -t scale > fit_results/scale_results.txt
+# with -t resolution you also write the scale file
 cd ..
 python res_scale_plotter.py -t resolution
 python res_scale_plotter.py -t scale
