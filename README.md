@@ -54,6 +54,10 @@ python res_scale_plotter.py -t resolution
 python res_scale_plotter.py -t scale
 ```
 
+```
+**2_final) source AN_sender.sh #scp dei plot su afs dove e' la nota
+```
+
 **2+) Con e senza SC corrections
 ```
 python cb_fitter.py -t res_SC > fit_results/resolution_results.txt
