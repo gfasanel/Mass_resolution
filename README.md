@@ -15,8 +15,8 @@ python Dumper.py > tree_content_2016.log
 #E' commentato perche' fare gli istogrammi prende tempo: 
 # Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
 #lancia questo comando solo se sei veramente sicuro
-#python histos_for_sigma_extra.py
-#python histos_for_sigma_extra_newID.py
+#python histos_for_sigma_extra.py ##-> Da usare se c'e' un bool nel tree
+#python histos_for_sigma_extra_newID.py ##->questo usa una funzioncina per calcolarsi hasPassedHEEP
 #The histograms are saved in Extra_sigma/
 ```
 
