@@ -13,9 +13,10 @@ python Dumper.py > tree_content_2016.log
 
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
+# Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
 #lancia questo comando solo se sei veramente sicuro
-#python histos_for_sigma_extra.py
-#python histos_for_sigma_extra_newID.py
+#python histos_for_sigma_extra.py ##-> Da usare se c'e' un bool nel tree
+#python histos_for_sigma_extra_newID.py ##->questo usa una funzioncina per calcolarsi hasPassedHEEP
 #The histograms are saved in Extra_sigma/
 ```
 
@@ -36,10 +37,12 @@ https://tex.mendelu.cz/en/
 
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
-#quick test: python histos_for_resolution -i 0
+#quick test (questo per capire quanti job fare): 
+#python histos_for_resolution_newID.py -i 0
+#/pnfs/iihe/cms/store/user/wenxing/DYToEE_NNPDF30_13TeV-powheg-pythia8/crab_DYToEE_NNPDF30_13TeV-powheg-RunIISpring16DR80/160531_162017/0000/
+#index max job is  842
 #lancia questo comando solo se sei veramente sicuro
-# in ~/directsubmissiontest: source submit_all.sh
-#python histos_for_resolution -i xxx
+# in ~/directsubmissiontest: source submit_all.sh 842
 #source ~/directsubmissiontest/checker.sh
 
 #source resolution_histos_maker.sh #hadd all jobs together
