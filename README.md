@@ -8,6 +8,10 @@ source setter.sh #(setta root e cmsenv)
 ```
 python Dumper.py > tree_content_2016.log
 ```
+**0bis) Dump the root files names in a .txt**
+```
+source file_dumper.sh```
+
 
 **1) Sigma extra calculation**
 
