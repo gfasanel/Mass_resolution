@@ -16,13 +16,16 @@ source file_dumper.sh
 
 **1) Sigma extra calculation**
 
-``` sh
+```
 #E' commentato perche' fare gli istogrammi prende tempo: 
 #Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
 #lancia questo comando solo se sei veramente sicuro
 #python histos_for_sigma_extra_newID.py ##->questo usa una funzioncina mia per calcolarsi hasPassedHEEP
 ##python histos_for_sigma_extra.py ##-> Da usare se c'e' un bool nel tree
-#The histograms are saved in Extra_sigma/
+#The histograms are saved in Extra_sigma/Histos/
+#### Sottomettere i job
+# in job_submission: source submit_sigma_all.sh 842
+#Controllare lo stato dei job: source job_submission/checker.sh
 ```
 
 ```
@@ -44,11 +47,13 @@ https://tex.mendelu.cz/en/
 #E' commentato perche' fare gli istogrammi prende tempo: 
 #quick test (questo per capire quanti job fare): 
 #python histos_for_resolution_newID.py -i 0
-#/pnfs/iihe/cms/store/user/wenxing/DYToEE_NNPDF30_13TeV-powheg-pythia8/crab_DYToEE_NNPDF30_13TeV-powheg-RunIISpring16DR80/160531_162017/0000/
 #index max job is  842
 #lancia questo comando solo se sei veramente sicuro
+# in job_submission: source submit_all.sh 842
+#Controllare lo stato dei job: source job_submission/checker.sh
+
 # in ~/directsubmissiontest: source submit_all.sh 842
-#source ~/directsubmissiontest/checker.sh
+#Controllare lo stato dei job: source ~/directsubmissiontest/checker.sh
 
 #source resolution_histos_maker.sh #hadd all jobs together
 ```
