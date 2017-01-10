@@ -15,7 +15,7 @@ source file_dumper.sh```
 
 **1) Sigma extra calculation**
 
-```
+```sh
 #E' commentato perche' fare gli istogrammi prende tempo: 
 #Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
 #lancia questo comando solo se sei veramente sicuro
