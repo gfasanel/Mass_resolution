@@ -17,10 +17,10 @@ source file_dumper.sh```
 
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
-# Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
+#Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
 #lancia questo comando solo se sei veramente sicuro
-#python histos_for_sigma_extra.py ##-> Da usare se c'e' un bool nel tree
-#python histos_for_sigma_extra_newID.py ##->questo usa una funzioncina per calcolarsi hasPassedHEEP
+#python histos_for_sigma_extra_newID.py ##->questo usa una funzioncina mia per calcolarsi hasPassedHEEP
+##python histos_for_sigma_extra.py ##-> Da usare se c'e' un bool nel tree
 #The histograms are saved in Extra_sigma/
 ```
 
