@@ -1,9 +1,9 @@
+#I had to remove the ecaldrivenSeed because there is something fishy with this only variable
+#Z_leg_index  0
+#ecaldrivenSeed  <ROOT._Bit_reference object at 0x68c3c80>
 def HEEP_ID_70(tree,Z_leg_index):
-    #Z_leg_index =>tree.Zee_i1[i]
-    #new tracker iso recomputed on the fly; it is not the one in the GsfElectron
     if(tree.gsf_isEB[Z_leg_index]):
         pass_sel=(tree.gsf_pt[Z_leg_index]>35)*\
-            (tree.gsf_ecaldrivenSeed[Z_leg_index]==1)*\
             (abs(tree.gsf_deltaEtaSeedClusterTrackAtCalo[Z_leg_index])<0.004)*\
             (abs(tree.gsf_deltaPhiSuperClusterTrackAtVtx[Z_leg_index])<0.06)*\
             (tree.gsf_hadronicOverEm[Z_leg_index] < (1./tree.gsf_caloEnergy[Z_leg_index] + 0.05))*\
@@ -14,9 +14,7 @@ def HEEP_ID_70(tree,Z_leg_index):
             (abs(tree.gsf_dxy_firstPVtx[Z_leg_index])<0.02)
         
     elif(tree.gsf_isEE[Z_leg_index]):
-        #(abs(tree.gsf_deltaEtaSeedClusterTrackAtCalo[Z_leg_index])<0.006)*\ => removed for run before a certain number
         pass_sel=(tree.gsf_pt[Z_leg_index]>35)*\
-            (tree.gsf_ecaldrivenSeed[Z_leg_index]==1)*\
             (abs(tree.gsf_deltaEtaSeedClusterTrackAtCalo[Z_leg_index])<0.006)*\
             (abs(tree.gsf_deltaPhiSuperClusterTrackAtVtx[Z_leg_index])<0.06)*\
             (tree.gsf_hadronicOverEm[Z_leg_index] < (5./tree.gsf_caloEnergy[Z_leg_index] + 0.05))*\

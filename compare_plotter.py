@@ -87,26 +87,28 @@ Regions=['BB','BE','EE']
 
 #opern the file and take the numbers
 for regions in Regions:
-    with open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+variable_type+'_'+regions+'.txt')) as file_res:
+    #with open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+variable_type+'_'+regions+'.txt')) as file_res:
+    with open(str('Resolution/histograms_mass_'+variable_type+'_'+regions+'.txt')) as file_res:
         for line in file_res:  #Line is a string       #split the string on whitespace, return a list of numbers
             # (as strings)                                                                               
             numbers_str = line.split()    #convert numbers to floats   
             numbers_float = map(float, line.split())
             ##numbers_float = [float(x) for x in numbers_str]  #map(float,numbers_str) works too
             mass[regions].append(numbers_float[0])
-            mass_err[regions].append(0)#for the moment
-            res[regions].append(numbers_float[1])
-            res_err[regions].append(numbers_float[2])
+            mass_err[regions].append(numbers_float[1])
+            res[regions].append(numbers_float[2])
+            res_err[regions].append(numbers_float[3])
 
-    with open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+variable_type+'_supercluster_'+regions+'.txt')) as file_res_2:
+    #with open(str('/user/gfasanel/public/HEEP/Eff_plots/histograms_mass_'+variable_type+'_supercluster_'+regions+'.txt')) as file_res_2:
+    with open(str('Resolution/histograms_mass_'+variable_type+'_supercluster_'+regions+'.txt')) as file_res_2:
         for line in file_res_2:
             numbers_str = line.split()    #convert numbers to floats   
             numbers_float = map(float, line.split())
-            ##numbers_float = [float(x) for x in numbers_str]  #map(float,numbers_str) works too
             mass_2[regions].append(numbers_float[0])
-            mass_err_2[regions].append(0)#for the moment
-            res_2[regions].append(numbers_float[1])
-            res_err_2[regions].append(numbers_float[2])
+            mass_err_2[regions].append(numbers_float[1])
+            #res_2[regions].append(numbers_float[1] + 0.0008)##REMOVE THISSSS
+            res_2[regions].append(numbers_float[2])
+            res_err_2[regions].append(numbers_float[3])
 
 #usage of array for TGraph, otherwise it doesn't work
 mass_array={}
@@ -141,6 +143,7 @@ for regions in Regions:
     MAX[regions]=max([max(res[regions]),max(res_2[regions])])
     MIN[regions]=min([min(res[regions]),min(res_2[regions])])
     res_graph[regions].GetYaxis().SetRangeUser(MIN[regions] -0.3*MIN[regions],MAX[regions]+0.3*MAX[regions])
+    res_graph[regions].GetXaxis().SetRangeUser(0.,4300)
     if(_t=='scale'):
        res_graph[regions].GetYaxis().SetRangeUser(MIN[regions] -0.003*MIN[regions],MAX[regions]+0.01*MAX[regions])
 
@@ -199,14 +202,8 @@ for regions in Regions:
     cms.Draw()
 
     canvas[regions].Write()
-
-    if "scale" in variable_type:
-       canvas[regions].Print(str('roofit/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'_comparison.png'))
-       canvas[regions].Print(str('roofit/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'_comparison.pdf'))
-       canvas[regions].Print(str('roofit/fit_results/scale_'+regions+'/'+variable_type+'_'+regions+'_comparison.eps'))
-    elif "resolution" in variable_type:
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'_comparison.png'))
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'_comparison.pdf'))
-       canvas[regions].Print(str('roofit/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'_comparison.eps'))
+    canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'_comparison.png'))
+    canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'_comparison.pdf'))
+    canvas[regions].Print(str('~/public_html/Res_scale_15/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'_comparison.eps'))
 
 

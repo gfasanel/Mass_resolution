@@ -30,7 +30,7 @@ if __name__ == "__main__":
    main(sys.argv[1:]) #argument 0 is the name of the file.py, so let's start from the second one
 
 ###################Take the histograms#################
-file_mass=ROOT.TFile('../Resolution/histograms_mass_res.root','READ')
+file_mass=ROOT.TFile('../Resolution/partial_histos_2016/histograms_mass_res_0_2016.root','READ')
 
 if(_t=='resolution'):
     var_type= 'resolution'
@@ -45,20 +45,14 @@ if(_t=='res_HoE_cut'):
     var_type= 'resolution_HoE_cut'
     scale_type= 'scale_HoE_cut'
 
-if('res' in var_type): #if var_type contains the substring 'res'
-   file_res_BB = open(str('../Resolution/histograms_mass_'+var_type+'_BB.txt'),'w+')
-   file_res_BE = open(str('../Resolution/histograms_mass_'+var_type+'_BE.txt'),'w+')
-   file_res_EE = open(str('../Resolution/histograms_mass_'+var_type+'_EE.txt'),'w+')
-   file_scale_BB = open('../Resolution/histograms_mass_'+scale_type+'_BB.txt','w+')
-   file_scale_BE = open('../Resolution/histograms_mass_'+scale_type+'_BE.txt','w+') 
-   file_scale_EE = open('../Resolution/histograms_mass_'+scale_type+'_EE.txt','w+')
 
 hBase_mee_mr = file_mass.Get('hBase_mee_mr') #Taken from the file, binning decided in histos_.py
 
 print "################################### FITTING PROCEDURE ############################################"
 
-for regions in ['BB','BE','EE']:
-     for i in range(1, hBase_mee_mr.GetNbinsX()+1):# for each mass bin
+for regions in ['BB','BE']:
+     #for i in range(1, hBase_mee_mr.GetNbinsX()+1):# for each mass bin
+     for i in range(1, 2):# only the first bin
         hist_res   = file_mass.Get(str('h_'+var_type+'_'+regions+'_%d'%i))
         if('res' in var_type): #If substring 'res' is in var_type
            x=ROOT.RooRealVar("x","(m_{reco}-m_{gen})/m_{gen}",-0.1,+0.06)  #name, title, range: you can use ("x","my x variable",-10,10)
@@ -132,21 +126,11 @@ for regions in ['BB','BE','EE']:
         eff.Draw()
         cms.Draw()
 
-        c.SaveAs(str('~/public_html/Res_scale_16/fit_results/'+var_type+'_'+regions+'/'+hist_res.GetName()+'.png'))
-        c.SaveAs(str('~/public_html/Res_scale_16/fit_results/'+var_type+'_'+regions+'/'+hist_res.GetName()+'.pdf'))
+        c.SaveAs(str('~/public_html/Res_scale_16/fit_results/'+var_type+'_'+regions+'/temp/'+hist_res.GetName()+'.png'))
+        c.SaveAs(str('~/public_html/Res_scale_16/fit_results/'+var_type+'_'+regions+'/temp/'+hist_res.GetName()+'.pdf'))
+        c.SaveAs(str('~/public_html/Res_scale_16/Extra_sigma/temp/'+hist_res.GetName()+'.png'))
+        c.SaveAs(str('~/public_html/Res_scale_16/Extra_sigma/temp/'+hist_res.GetName()+'.pdf'))
 
-        #Save Parameters in a txt file
-        if('res' in var_type): # if var_type contains 'res'
-           if regions=='BB':
-              file_res_BB.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), sigma_fit, sigma_fit_error))
-              file_scale_BB.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), mean_fit + 1., mean_fit_error))
-           elif regions=='BE':
-              file_res_BE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), sigma_fit, sigma_fit_error))
-              file_scale_BE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), mean_fit + 1., mean_fit_error))
-  
-           elif regions=='EE':
-              file_res_EE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), sigma_fit, sigma_fit_error))
-              file_scale_EE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), mean_fit + 1., mean_fit_error))
 
 
 

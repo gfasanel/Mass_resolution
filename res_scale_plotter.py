@@ -36,7 +36,7 @@ def main(argv):# defining the main function, called later
 if __name__ == "__main__":
    main(sys.argv[1:]) 
 
-lumi_value=2.6
+lumi_value=12.4
 #variable_type='resolution'
 #variable_type='resolution_supercluster'
 #variable_type=scale
@@ -76,7 +76,7 @@ for regions in Regions:
             #mass_err[regions].append(0)
             if variable_type in ['resolution','resolution_supercluster','resolution_h_recover']: # you have the extra sigma to add in quadrature
                print "[STATUS] Adding extra sigma for resolution"
-               with open(str('Extra_sigma/final_extra_sigma_'+regions+'.dat')) as file_extra_sigma:
+               with open(str('Extra_sigma/final_extra_sigma_2016_'+regions+'.dat')) as file_extra_sigma:
                   for line in file_extra_sigma:
                      # split the string on whitespace, return a list of numbers as strings
                      sigmas_str = line.split()  
@@ -141,7 +141,7 @@ for regions in Regions:
 
     if variable_type == "resolution":
        print "fitting resolution in region ",regions
-       res_graph[regions].GetYaxis().SetRangeUser(1.,4.)
+       res_graph[regions].GetYaxis().SetRangeUser(0.7,4.)
        if regions in ['EE']:
           res_graph[regions].GetYaxis().SetRangeUser(1.,5.5)
        x1=res_graph[regions].GetXaxis().GetBinLowEdge(res_graph[regions].GetXaxis().GetFirst())

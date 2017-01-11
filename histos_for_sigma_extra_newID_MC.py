@@ -7,30 +7,18 @@ from HEEP_sel_70 import *
 
 #run with python histos_for_sigma_extra_newID.py
 ##########################################################################################
-#tree_MC   = ROOT.TChain("IIHEAnalysis")
-#samples_path='/pnfs/iihe/cms/store/user/wenxing/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_PUMoriond17_new/161207_094659/'
-#label_MC='Moriond17'
-##samples=['0000','0001','0002','0003','0004'] #-->maybe too many files for a chain
-#samples=['0000']
-#
-#for sample in samples:
-#    #print str(samples_path+sample+"/")
-#    for file in os.listdir(str(samples_path+sample+"/")):
-#        if file.endswith(".root"):
-#            #print file
-#            tree_MC.Add(str(samples_path+sample+"/"+file))
+tree_MC   = ROOT.TChain("IIHEAnalysis")
+samples_path='/pnfs/iihe/cms/store/user/wenxing/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_PUMoriond17_new/161207_094659/'
+label_MC='Moriond17'
+#samples=['0000','0001','0002','0003','0004'] #-->maybe too many files for a chain
+samples=['0000']
 
-#################            DATA                        ################################
-
-##########RUNB
-tree_data = ROOT.TChain("IIHEAnalysis")
-f_in = open("/user/gfasanel/Mass_resolution_study/Extra_sigma/data_files/data_files_runB_Moriond17.dat","r")
-#f_in = open("Extra_sigma/data_files/test.dat","r")
-files=f_in.readlines()
-for file in files:
-    tree_data.Add(file.strip())     #strip() is needed to remove leading and ending spaces
-
-label_data='runB_Moriond17'
+for sample in samples:
+    #print str(samples_path+sample+"/")
+    for file in os.listdir(str(samples_path+sample+"/")):
+        if file.endswith(".root"):
+            #print file
+            tree_MC.Add(str(samples_path+sample+"/"+file))
 
 ##########################################################################################
 #                                 Declare and fill histograms
@@ -53,8 +41,8 @@ h_mee_data = {}
 #print "MC entries ",tree_MC.GetEntries()
 
 #var_type=['data','MC']
-var_type=['data']
-#var_type=['MC']
+#var_type=['data']
+var_type=['MC']
 
 for var in var_type:
 	detector_regions=['BB','BE','EE','BEplus','BEminus']
@@ -105,6 +93,7 @@ for var in var_type:
                 
                 pass_sel_1=HEEP_ID_70(tree,Z_leg_index_1)
                 pass_sel_2=HEEP_ID_70(tree,Z_leg_index_2)
+
                 if(pass_sel_1 and pass_sel_2):
                     if(temp_mass<tree.Zee_mass_HEEP[i]):
                         temp_mass=tree.Zee_mass_HEEP[i]

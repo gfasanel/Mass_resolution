@@ -40,6 +40,15 @@ Guarda l'out per capire quanti job servono e a quel punto:
 index max job is 16
 A quel punto
 ##### SEND ALL JOBS
+source job_submission/submit_sigma_extra_B.sh 68
+source job_submission/submit_sigma_extra_C.sh 22
+source job_submission/submit_sigma_extra_D.sh 26
+source job_submission/submit_sigma_extra_E.sh 24
+source job_submission/submit_sigma_extra_F.sh 16
+source job_submission/submit_sigma_extra_G.sh 38
+source job_submission/submit_sigma_extra_H.sh 123
+source job_submission/submit_sigma_extra_MC.sh 5
+
 [gfasanel@m6 Mass_resolution_study]$ source job_submission/submit_sigma_extra_F.sh 16
 ##stessa cosa per il MC
 #source job_submission/submit_sigma_extra_MC.sh 5
@@ -48,6 +57,7 @@ A quel punto
 
 
 ####HADD ALL ROOT FILES
+source hadder.sh
 ```
 
 ### Fatte le ntuple fitta tutto e cucina i numeri
@@ -55,7 +65,7 @@ A quel punto
 cd roofit/
 #nota che hai bisogno di caricare qualche libreria per poter utilizzare ROOFit correttamente,
 #io lo faccio con un rootlogon messo nella cartella roofit
-python Zpeak_fitter.py > debug.txt
+python Zpeak_fitter.py | tee debug.txt
 #Per scrivere tutto su una tabella latex
 python ../Extra_sigma/sigma_extra.py
 cd ../
@@ -73,10 +83,10 @@ https://tex.mendelu.cz/en/
 #Controlla che qualcosa ci sia
 h_mee_gen_BB->GetEntries()
 h_resolution_BB_1->GetEntries()
-#index max job is  842
+#index max job is  3
 ### SEND ALL JOBS
 #lancia questo comando solo se sei veramente sicuro
-# in job_submission: source job_submission/submit_resolution.sh 842
+# in job_submission: source job_submission/submit_resolution.sh 3
 #Controllare lo stato dei job: source job_submission/checker.sh
 
 ### HADD ALL JOBS

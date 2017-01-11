@@ -24,13 +24,13 @@ from HEEP_sel_70 import *
 
 ##########RUNB
 tree_data = ROOT.TChain("IIHEAnalysis")
-f_in = open("/user/gfasanel/Mass_resolution_study/Extra_sigma/data_files/data_files_runB_Moriond17.dat","r")
+f_in = open("/user/gfasanel/Mass_resolution_study/Extra_sigma/data_files/data_files_runE_Moriond17.dat","r")
 #f_in = open("Extra_sigma/data_files/test.dat","r")
 files=f_in.readlines()
 for file in files:
     tree_data.Add(file.strip())     #strip() is needed to remove leading and ending spaces
 
-label_data='runB_Moriond17'
+label_data='runE_Moriond17'
 
 ##########################################################################################
 #                                 Declare and fill histograms
@@ -105,6 +105,7 @@ for var in var_type:
                 
                 pass_sel_1=HEEP_ID_70(tree,Z_leg_index_1)
                 pass_sel_2=HEEP_ID_70(tree,Z_leg_index_2)
+
                 if(pass_sel_1 and pass_sel_2):
                     if(temp_mass<tree.Zee_mass_HEEP[i]):
                         temp_mass=tree.Zee_mass_HEEP[i]

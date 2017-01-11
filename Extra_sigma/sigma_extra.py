@@ -26,7 +26,7 @@ for region in det_regions:
                 # split the string on whitespace, return a list of numbers as strings
                 numbers_str = line.split()                               
                 numbers_float = map(float, line.split())
-                mean[var][region]       =numbers_float[0]
+                mean[var][region]       =numbers_float[0] #delta w.r.t 91.2
                 mean_error[var][region] =numbers_float[1]
                 sigma[var][region]      =numbers_float[2]
                 sigma_error[var][region]=numbers_float[3]
@@ -38,9 +38,9 @@ final_sigma_extra={}
 
 latex_table.write("\\begin{table}[htb]\n")
 latex_table.write("\\begin{center}\n")
-latex_table.write("\\begin{tabular}{ccccccc}\n")
+latex_table.write("\\begin{tabular}{cccccccc}\n")
 latex_table.write("\\hline\n")
-latex_table.write("Category & $\sigma_{data}$ [\%] & $\sigma_{MC}$ [\%] & $\sigma_{extra}$ [\%] & $\sigma_{data}^{eff}$ [\%] & $\sigma_{MC}^{eff}$ [\%] & $\sigma_{extra}^{eff}$ [\%]\\\\ \hline\n")                                                                                   
+latex_table.write("Category & $\\frac{\Delta M}{M} [\%]$ & $\sigma_{data}$ [\%] & $\sigma_{MC}$ [\%] & $\sigma_{extra}$ [\%] & $\sigma_{data}^{eff}$ [\%] & $\sigma_{MC}^{eff}$ [\%] & $\sigma_{extra}^{eff}$ [\%]\\\\ \hline\n")                                                                                   
 #      BB & 1.77 & 1.32 & 1.171 \\
 #      BE & 2.84 & 2.27 & 1.699\\
 #      EE & 3.25 & 2.0  & 2.504\\
@@ -50,6 +50,8 @@ print "File is /user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_
 for region in det_regions:
     #print "File is ",str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_extra_sigma_2016_'+region+'.dat')
     final_sigma_extra[region]= open(str('/user/gfasanel/HEEP/CMSSW_7_2_0_patch1/src/Mass_resolution/Extra_sigma/final_extra_sigma_2016_'+region+'.dat'),'w+')
+    mean_diff         = (mean['data'][region] - mean['MC'][region])/0.9118
+    mean_diff_error   = (ROOT.sqrt(mean_error['data'][region]*mean_error['data'][region] + mean_error['MC'][region]*mean_error['MC'][region]))/0.9118
     sigma_data        = sigma['data'][region]
     sigma_data_error  = sigma_error['data'][region]
     sigma_MC          = sigma['MC'][region]
@@ -59,12 +61,12 @@ for region in det_regions:
     sigma_eff_final   = ROOT.sqrt(sigma_eff['data'][region]*sigma_eff['data'][region] - sigma_eff['MC'][region]*sigma_eff['MC'][region])
     final_sigma_extra[region].write("%lf %lf %lf %lf %lf\n"%(sigma_extra,sigma_extra_error,sigma_eff['data'][region],sigma_eff['MC'][region],sigma_eff_final))
 
-    latex_table.write("%s %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s\n"
-                      %(region,"&",sigma_data*100.,"$\pm$", sigma_data_error*100.,"&",sigma_MC*100.,"$\pm$",sigma_MC_error*100.,"&",sigma_extra*100.,"$\pm$",sigma_extra_error*100.,"&",sigma_eff['data'][region]*100,"&",sigma_eff['MC'][region]*100,"&",sigma_eff_final*100,"\\\\"))
+    latex_table.write("%s %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s %.2lf %s\n"
+                      %(region,"&",mean_diff, "$\pm$", mean_diff_error, "&", sigma_data*100.,"$\pm$", sigma_data_error*100.,"&",sigma_MC*100.,"$\pm$",sigma_MC_error*100.,"&",sigma_extra*100.,"$\pm$",sigma_extra_error*100.,"&",sigma_eff['data'][region]*100,"&",sigma_eff['MC'][region]*100,"&",sigma_eff_final*100,"\\\\"))
 
 
 latex_table.write("\\hline\n")
 latex_table.write("\\end{tabular}\n")
-latex_table.write("\\caption{Results per category for the $\sigma_{extra}$ parameter. \label{tab:extra}} \n")
+latex_table.write("\\caption{Results per category for the data-MC scale shift $\\frac{\Delta M}{M}$ the $\sigma_{extra}$ parameters. \label{tab:extra}} \n")
 latex_table.write("\\end{center}\n")
 latex_table.write("\\end{table}\n")                       
