@@ -25,7 +25,7 @@ source file_dumper.sh
 
 ##### TEST JOBS 
 # Prima devi capire quanti job sottometter
-source job_submission/submit_sigma_extra_all.sh 0 #runB
+source job_submission/submit_sigma_extra_B.sh 0 #runB
 source job_submission/submit_sigma_extra_C.sh 0
 source job_submission/submit_sigma_extra_D.sh 0
 source job_submission/submit_sigma_extra_E.sh 0
