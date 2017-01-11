@@ -4,12 +4,13 @@ cd Mass_resolution_study/ (link simbolico per HEEP/CMSSW_7_2_0_patch1/src/Mass_r
 source setter.sh #(setta root e cmsenv)
 ```
 
-**0) Get the name of the variables**
+**00) Get the name of the variables**
 ```
 python Dumper.py > tree_content_2016.log
 ```
-**0bis) Dump the root files names in a .txt**
+**0) Dump the root files names in a .txt**
 ```
+#Scrivi la lista dei file su cui girare
 source file_dumper.sh
 ```
 
@@ -25,7 +26,7 @@ source file_dumper.sh
 
 ##### TEST JOBS 
 # Prima devi capire quanti job sottometter
-source job_submission/submit_sigma_extra_B.sh 0 #runB
+source job_submission/submit_sigma_extra_B.sh 0 
 source job_submission/submit_sigma_extra_C.sh 0
 source job_submission/submit_sigma_extra_D.sh 0
 source job_submission/submit_sigma_extra_E.sh 0
@@ -35,11 +36,18 @@ source job_submission/submit_sigma_extra_H.sh 0
 source job_submission/submit_sigma_extra_MC.sh 0
 
 Guarda l'out per capire quanti job servono e a quel punto:
-# source job_submission/submit_sigma_extra_all.sh 68
+[gfasanel@m6 Mass_resolution_study]$ emacs job_submission/script_sigma_F_0.stdout 
+index max job is 16
+A quel punto
+##### SEND ALL JOBS
+[gfasanel@m6 Mass_resolution_study]$ source job_submission/submit_sigma_extra_F.sh 16
+##stessa cosa per il MC
+#source job_submission/submit_sigma_extra_MC.sh 5
+
 #Controllare lo stato dei job: source job_submission/checker.sh
 
-##MC
-#source job_submission/submit_sigma_extra_MC.sh 5
+
+####HADD ALL ROOT FILES
 ```
 
 ### Fatte le ntuple fitta tutto e cucina i numeri
@@ -60,16 +68,18 @@ https://tex.mendelu.cz/en/
 
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
-#quick test (questo per capire quanti job fare): 
+### TEST JOB (questo per capire quanti job fare): 
 #python histos_for_resolution_newID.py -i 0
+#Controlla che qualcosa ci sia
+h_mee_gen_BB->GetEntries()
+h_resolution_BB_1->GetEntries()
 #index max job is  842
+### SEND ALL JOBS
 #lancia questo comando solo se sei veramente sicuro
-# in job_submission: source submit_all.sh 842
+# in job_submission: source job_submission/submit_resolution.sh 842
 #Controllare lo stato dei job: source job_submission/checker.sh
 
-# in ~/directsubmissiontest: source submit_all.sh 842
-#Controllare lo stato dei job: source ~/directsubmissiontest/checker.sh
-
+### HADD ALL JOBS
 #source resolution_histos_maker.sh #hadd all jobs together
 ```
 
