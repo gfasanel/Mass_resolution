@@ -1,0 +1,2 @@
+#hadd Extra_sigma/Histos/MC_Zpeak_2016_Moriond17.root Extra_sigma/Histos/MC_Zpeak_2016_Moriond17_*.root
+hadd Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17_*.root
