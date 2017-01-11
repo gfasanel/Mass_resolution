@@ -19,15 +19,30 @@ source file_dumper.sh
 ```
 #E' commentato perche' fare gli istogrammi prende tempo: 
 #Impiega 14 minuti circa per 1 milione di eventi (quindi ti puoi fare il conto)
-#lancia questo comando solo se sei veramente sicuro
+
 #python histos_for_sigma_extra_newID.py ##->questo usa una funzioncina mia per calcolarsi hasPassedHEEP
-##python histos_for_sigma_extra.py ##-> Da usare se c'e' un bool nel tree
 #The histograms are saved in Extra_sigma/Histos/
-#### Sottomettere i job
-# in job_submission: source submit_sigma_all.sh 842
+
+##### TEST JOBS 
+# Prima devi capire quanti job sottometter
+source job_submission/submit_sigma_extra_all.sh 0 #runB
+source job_submission/submit_sigma_extra_C.sh 0
+source job_submission/submit_sigma_extra_D.sh 0
+source job_submission/submit_sigma_extra_E.sh 0
+source job_submission/submit_sigma_extra_F.sh 0
+source job_submission/submit_sigma_extra_G.sh 0
+source job_submission/submit_sigma_extra_H.sh 0
+source job_submission/submit_sigma_extra_MC.sh 0
+
+Guarda l'out per capire quanti job servono e a quel punto:
+# source job_submission/submit_sigma_extra_all.sh 68
 #Controllare lo stato dei job: source job_submission/checker.sh
+
+##MC
+#source job_submission/submit_sigma_extra_MC.sh 5
 ```
 
+### Fatte le ntuple fitta tutto e cucina i numeri
 ```
 cd roofit/
 #nota che hai bisogno di caricare qualche libreria per poter utilizzare ROOFit correttamente,
