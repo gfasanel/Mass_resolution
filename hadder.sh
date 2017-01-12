@@ -1,2 +1,11 @@
 #hadd Extra_sigma/Histos/MC_Zpeak_2016_Moriond17.root Extra_sigma/Histos/MC_Zpeak_2016_Moriond17_*.root
-hadd Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runC_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runC_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runD_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runD_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runE_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runE_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runF_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runF_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runG_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runG_Moriond17_*.root
+#hadd Extra_sigma/Histos/data_Zpeak_2016_runH_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runH_Moriond17_*.root
+
+#Now hadd everything together
+hadd Extra_sigma/Histos/data_Zpeak_2016_runB-H_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runC_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runD_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runE_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runF_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runG_Moriond17.root Extra_sigma/Histos/data_Zpeak_2016_runH_Moriond17.root

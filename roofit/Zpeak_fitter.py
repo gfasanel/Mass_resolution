@@ -14,17 +14,16 @@ import sys,getopt
 
 print "################################### FITTING THE Z PEAK ############################################"
 lumi_value=36.46
-for var_type in ['data','MC']:
+#for var_type in ['data','MC']:
 #for var_type in ['MC']:
-#for var_type in ['data']:
+for var_type in ['data']:
    #for regions in ['BB','BE','EE']:
    for regions in ['BB','BE']:
    #for regions in ['BE']:
       if var_type=='MC':
          file_mass=ROOT.TFile('/user/gfasanel/Mass_resolution_study/Extra_sigma/Histos/MC_Zpeak_2016_Moriond17.root','READ')
       else:
-         file_mass=ROOT.TFile('/user/gfasanel/Mass_resolution_study/Extra_sigma/Histos/data_Zpeak_2016_runB_Moriond17.root','READ')
-         #file_mass=ROOT.TFile('/user/gfasanel/Mass_resolution_study/Extra_sigma/data_Zpeak_2016.root','READ')
+         file_mass=ROOT.TFile('/user/gfasanel/Mass_resolution_study/Extra_sigma/Histos/data_Zpeak_2016_runB-H_Moriond17.root','READ')
       hist_res   = file_mass.Get(str('h_mee_'+var_type+'_'+regions))
       #hist_res.Rebin(3) #1.5 GeV binning
       #hist_res.Rebin(2) #0.75 GeV binning
