@@ -46,9 +46,14 @@ if(_t=='res_HoE_cut'):
     scale_type= 'scale_HoE_cut'
 
 if('res' in var_type): #if var_type contains the substring 'res'
+   #write all the parameters of the cb (or dCB) you fitted as a function of the mass bins
    file_res_BB = open(str('../Resolution/histograms_mass_'+var_type+'_BB.txt'),'w+')
    file_res_BE = open(str('../Resolution/histograms_mass_'+var_type+'_BE.txt'),'w+')
    file_res_EE = open(str('../Resolution/histograms_mass_'+var_type+'_EE.txt'),'w+')
+   file_alphaL_BB = open(str('../Resolution/histograms_mass_alphaL_BB.txt'),'w+')
+   file_alphaL_BE = open(str('../Resolution/histograms_mass_alphaL_BE.txt'),'w+')
+   file_alphaL_EE = open(str('../Resolution/histograms_mass_alphaL_EE.txt'),'w+')
+   #The scale can be directly derived from the resolution parameter
    file_scale_BB = open('../Resolution/histograms_mass_'+scale_type+'_BB.txt','w+')
    file_scale_BE = open('../Resolution/histograms_mass_'+scale_type+'_BE.txt','w+') 
    file_scale_EE = open('../Resolution/histograms_mass_'+scale_type+'_EE.txt','w+')
@@ -76,6 +81,7 @@ for regions in ['BB','BE','EE']:
         alphaR=ROOT.RooRealVar("alphaR","alphaR",3,0.,5)
         nR=ROOT.RooRealVar("nL","nL",100,0.,1000)
 
+        #You can choose between a standatd cb function and a double sided cb function
         #cball=ROOT.RooCBShape("cball", "crystal ball", x,mean,sigma,alpha,n) 
         cball=ROOT.RooDCBShape("dcball", "double crystal ball", x, mean, sigma, alpha, alphaR, n, nR)
         cball.fitTo(dh)
@@ -132,20 +138,23 @@ for regions in ['BB','BE','EE']:
         eff.Draw()
         cms.Draw()
 
-        c.SaveAs(str('~/public_html/Res_scale_16/fit_results/'+var_type+'_'+regions+'/'+hist_res.GetName()+'.png'))
-        c.SaveAs(str('~/public_html/Res_scale_16/fit_results/'+var_type+'_'+regions+'/'+hist_res.GetName()+'.pdf'))
+        c.SaveAs(str('~/public_html/Res_scale_Moriond17/fit_results/'+var_type+'_'+regions+'/'+hist_res.GetName()+'.png'))
+        c.SaveAs(str('~/public_html/Res_scale_Moriond17/fit_results/'+var_type+'_'+regions+'/'+hist_res.GetName()+'.pdf'))
 
         #Save Parameters in a txt file
         if('res' in var_type): # if var_type contains 'res'
            if regions=='BB':
               file_res_BB.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), sigma_fit, sigma_fit_error))
+              file_alphaL_BB.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), alpha_fit, alpha_fit_error))
               file_scale_BB.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), mean_fit + 1., mean_fit_error))
            elif regions=='BE':
               file_res_BE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), sigma_fit, sigma_fit_error))
+              file_alphaL_BE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), alpha_fit, alpha_fit_error))
               file_scale_BE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), mean_fit + 1., mean_fit_error))
   
            elif regions=='EE':
               file_res_EE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), sigma_fit, sigma_fit_error))
+              file_alphaL_EE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), alpha_fit, alpha_fit_error))
               file_scale_EE.write("%lf %lf %lf %lf\n"%(hBase_mee_mr.GetBinCenter(i), hBase_mee_mr.GetBinCenter(i) - hBase_mee_mr.GetBinLowEdge(i), mean_fit + 1., mean_fit_error))
 
 

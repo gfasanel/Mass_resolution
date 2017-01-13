@@ -90,16 +90,18 @@ h_resolution_BB_1->GetEntries()
 #Controllare lo stato dei job: source job_submission/checker.sh
 
 ### HADD ALL JOBS
-#source resolution_histos_maker.sh #hadd all jobs together
+#source resolution_histos_hadder.sh #hadd all jobs together
 ```
 
 ```
 cd roofit/
 python cb_fitter.py -t resolution > fit_results/resolution_results.txt
-# with -t resolution you also write the scale file
+# with -t resolution you write all the parameters of the cb (or dCB), including the scale file (fitted scale vs mass bins)
 cd ..
+#Make the plot of the fitted parameters vs mass (the -t parameter specify the name of the dat file to plot)
 python res_scale_plotter.py -t resolution
 python res_scale_plotter.py -t scale
+python res_scale_plotter.py -t alphaL
 ```
 
 ```
@@ -109,7 +111,6 @@ python res_scale_plotter.py -t scale
 **2+) Con e senza SC corrections
 ```
 python cb_fitter.py -t res_SC > fit_results/resolution_results.txt
-python compare_plotter.py -t resolution
 python compare_plotter.py -t scale
 
 ```

@@ -37,9 +37,11 @@ if __name__ == "__main__":
    main(sys.argv[1:]) 
 
 lumi_value=12.4
+#Possible variable types:
 #variable_type='resolution'
-#variable_type='resolution_supercluster'
+#variable_type='alphaL'
 #variable_type=scale
+#variable_type='resolution_supercluster'
 #variable_type=scale_supercluster
 #variable_type='HoverE'
 #variable_type='resolution_HoE_cut'
@@ -135,6 +137,10 @@ for regions in Regions:
     if 'scale' in variable_type:
         res_graph[regions].GetYaxis().SetTitle('mass scale')
         res_graph[regions].GetYaxis().SetRangeUser(0.98,1.01)
+    if 'alphaL' in variable_type:
+        res_graph[regions].GetYaxis().SetTitle('alphaL')
+        #res_graph[regions].GetYaxis().SetRangeUser(0.98,1.01)
+
     ###Fitting resolution and superimpose fit function
     res_graph[regions].Draw("APE")
     res_graph[regions].GetXaxis().SetRangeUser(0.,4500) # Above this SATURATION
@@ -193,7 +199,7 @@ for regions in Regions:
        res_noExtra_graph[regions].GetYaxis().SetTitle('#sigma_{fit} [%]')
        canvas_noExtra=ROOT.TCanvas("noExtra","noExtra");
        res_noExtra_graph[regions].Draw("APE")
-       canvas_noExtra.SaveAs(('~/public_html/Res_scale_16/fit_results/resolution_'+regions+'/'+variable_type+'_noExtra_'+regions+'.png'))
+       canvas_noExtra.SaveAs(('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_noExtra_'+regions+'.png'))
 
 
     ##This is for scale basically (quick and dirty, I know)
@@ -206,20 +212,20 @@ for regions in Regions:
 
 
     if ("scale" in variable_type) or ("resolution" in variable_type):
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
 
        if (variable_type=='resolution') or (variable_type=='scale'):
-          canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/'+variable_type+'_'+regions+'.png'))
-          canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/'+variable_type+'_'+regions+'.pdf'))
-          canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/'+variable_type+'_'+regions+'.eps'))
+          canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/'+variable_type+'_'+regions+'.png'))
+          canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/'+variable_type+'_'+regions+'.pdf'))
+          canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/'+variable_type+'_'+regions+'.eps'))
     elif (("HoverE" in variable_type) or  ("HTotoverETot" in variable_type)):
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/HoverE/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/HoverE/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/HoverE/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/HoverE/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/HoverE/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/HoverE/'+variable_type+'_'+regions+'.eps'))
     else:
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('~/public_html/Res_scale_16/fit_results/'+variable_type+'_'+regions+'.eps'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/'+variable_type+'_'+regions+'.png'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/'+variable_type+'_'+regions+'.pdf'))
+       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/'+variable_type+'_'+regions+'.eps'))
 
