@@ -96,6 +96,7 @@ h_resolution_BB_1->GetEntries()
 ```
 cd roofit/
 python cb_fitter.py -t resolution > fit_results/resolution_results.txt
+cb_fitter_cruijff.py -t resolution > fit_results/resolution_results_cruijf.txt
 # with -t resolution you write all the parameters of the cb (or dCB), including the scale file (fitted scale vs mass bins)
 cd ..
 #Make the plot of the fitted parameters vs mass (the -t parameter specify the name of the dat file to plot)
