@@ -150,118 +150,32 @@ for regions in Regions:
     res_graph[regions].SaveAs("graphs_to_fit/graph_"+variable_type+"_"+regions+".root")
     res_graph[regions].GetXaxis().SetRangeUser(0.,4500) # Above this SATURATION
 
-    if variable_type == "resolution":
-       print "fitting resolution in region ",regions
-       res_graph[regions].GetYaxis().SetRangeUser(0.7,4.)
-       if regions in ['EE']:
-          res_graph[regions].GetYaxis().SetRangeUser(1.,5.5)
-       x1=res_graph[regions].GetXaxis().GetBinLowEdge(res_graph[regions].GetXaxis().GetFirst())
-       #x2=res_graph[regions].GetXaxis().GetBinUpEdge(res_graph[regions].GetXaxis().GetLast())
-       x2=5250
-       func=ROOT.TF1("func","sqrt([0]*[0]/x + ([1]*[1])/(x*x) + [2]*[2]) + [3]*x",x1,x2)
-       if regions in ['BE','EE']:
-          func=ROOT.TF1("func","sqrt([0]*[0]/x + ([1]*[1])/(x*x) + [2]*[2])",x1,x2)
-       func.SetParNames("S","N","C","L")
-       func.SetParameter("S",0)
-       func.SetParLimits(0,0,30)
-       func.SetParameter("N",0)
-       func.SetParLimits(1,0,10)#N is positive
-       func.SetParameter("C",1)
-       if regions in ['BB']:
-          func.SetParameter("L",0.00001)
-          func.SetParLimits(3,0,1)#L is positive
-
-       res_graph[regions].Fit("func","R")
-       label_fit =ROOT.TLatex()
-       label_fit.SetNDC()
-       label_fit.SetTextSize(0.04)
-       if regions in ['BB']:
-          label_fit.DrawLatex(0.3,0.8,"#sqrt{#frac{S^{2}}{m_{gen}} + #frac{N^{2}}{m_{gen}^{2}} + C^{2}} + Lm_{gen}")
-       else:
-          label_fit.DrawLatex(0.3,0.8,"#sqrt{#frac{S^{2}}{m_{gen}} + #frac{N^{2}}{m_{gen}^{2}} + C^{2}}")
-       #label_fit.DrawLatex(0.3,0.7,"#chi^{2}/ndof=%.2lf"%(func.GetChisquare()/func.GetNDF()))
-       label_fit.DrawLatex(0.3,0.65,"S=%.1lf #pm %.1lf"%(func.GetParameter(0),func.GetParError(0)))
-       label_fit.DrawLatex(0.3,0.6,"N=%.1lf #pm %.1lf"%(func.GetParameter(1),func.GetParError(1)))
-       label_fit.DrawLatex(0.3,0.55,"C=%.2lf #pm %.2lf"%(func.GetParameter(2),func.GetParError(2)))
-       if regions in ['BB']:
-          label_fit.DrawLatex(0.3,0.5,"L=%.1e #pm %.1e"%(func.GetParameter(3),func.GetParError(3)))
-       label_fit.Draw()
-       label =ROOT.TLatex(0.12,0.95,str("CMS Internal; L= "+str(lumi_value)+" /fb (13 TeV)"))
-       label.SetNDC()
-       label.Draw()
-       label_region =ROOT.TLatex(0.8,0.8,str(regions))
-       label_region.SetNDC()
-       label_region.Draw()
-
-
-    if "resolution" in variable_type:
-       res_noExtra_graph[regions]=ROOT.TGraphErrors(len(mass_array[regions]),mass_array[regions],np.asarray(res_noExtra[regions]),mass_err_array[regions],np.asarray(res_noExtra_err[regions]))
-       res_noExtra_graph[regions].SetMarkerSize(1.2)
-       res_noExtra_graph[regions].SetMarkerStyle(20)
-       res_noExtra_graph[regions].GetXaxis().SetTitleSize(0.042)
-       res_noExtra_graph[regions].GetXaxis().SetTitle('m_{gen} [GeV]')
-       res_noExtra_graph[regions].GetYaxis().SetTitleSize(0.052)
-       res_noExtra_graph[regions].GetYaxis().SetTitle('#sigma_{fit} [%]')
-       canvas_noExtra=ROOT.TCanvas("noExtra","noExtra");
-       res_noExtra_graph[regions].Draw("APE")
-       canvas_noExtra.SaveAs(('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_noExtra_'+regions+'.png'))
-
-
-    ##This is for scale basically (quick and dirty, I know)
-    label_ =ROOT.TLatex(0.12,0.95,str("CMS Internal; L= "+str(lumi_value)+" /fb (13 TeV)"))
-    label_.SetNDC()
-    label_.Draw()
-    label_region_ =ROOT.TLatex(0.3,0.7,str(regions))
-    label_region_.SetNDC()
-    label_region_.Draw()
-
-
-    #if ("scale" in variable_type) or ("resolution" in variable_type):
-    if ("resolution" in variable_type):
-       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.eps'))
-
-       if (variable_type=='resolution') or (variable_type=='scale'):
-          #html is stupid: so it won't update the lumi label (?)
-          os.system('cp '+str('~/public_html/Res_scale_Moriond17/fit_results/resolution_'+regions+'/'+variable_type+'_'+regions+'.* ~/public_html/Res_scale_Moriond17/fit_results/'))
-    elif (("HoverE" in variable_type) or  ("HTotoverETot" in variable_type)):
-       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/HoverE/'+variable_type+'_'+regions+'.png'))
-       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/HoverE/'+variable_type+'_'+regions+'.pdf'))
-       canvas[regions].Print(str('~/public_html/Res_scale_Moriond17/fit_results/HoverE/'+variable_type+'_'+regions+'.eps'))
-    elif "alpha" in variable_type or "scale" in variable_type:
+    if "scale" in variable_type:
        print "fitting ", variable_type, " in ",regions
        #res_graph[regions].GetYaxis().SetRangeUser(0.7,4.)
        x1=res_graph[regions].GetXaxis().GetBinLowEdge(res_graph[regions].GetXaxis().GetFirst())
        #x2=res_graph[regions].GetXaxis().GetBinUpEdge(res_graph[regions].GetXaxis().GetLast())
        x2=5250
-       #func=ROOT.TF1("func","sqrt([0]*[0]/x + ([1]*[1])/(x*x) + [2]*[2]) + [3]*x",x1,x2)
-       func=ROOT.TF1("func","pol4",x1,x2)
-       #func.SetParNames("S","N","C","L")
-       #func.SetParameter("S",0)
-       #func.SetParLimits(0,0,30)
-       #func.SetParameter("N",0)
-       #func.SetParLimits(1,0,10)#N is positive
-       #func.SetParameter("C",1)
-
-#       if regions in ['BB']:
-#          func.SetParameter("L",0.00001)
-#          func.SetParLimits(3,0,1)#L is positive
+       func=ROOT.TF1("func","[0] + (x<[1])*([2]*(x-[1])*(x-[1])) + (x>[1])*([3]*(x-[1])*(x-[1]))",x1,x2)
+       func.SetParameter(0,0.998)
+       func.SetParameter(1,1500)
+       func.SetParameter(2,-0.000000012)
+       if regions=='BB':
+          func.SetParameter(3,-0.000000012)
+       elif regions== 'BE':
+          func.SetParameter(3,+0.0000000012)
 
        res_graph[regions].Fit("func","R")
        label_fit =ROOT.TLatex()
        label_fit.SetNDC()
        label_fit.SetTextSize(0.04)
-       if regions in ['BB']:
-          label_fit.DrawLatex(0.3,0.8,"#sqrt{#frac{S^{2}}{m_{gen}} + #frac{N^{2}}{m_{gen}^{2}} + C^{2}} + Lm_{gen}")
-       else:
-          label_fit.DrawLatex(0.3,0.8,"#sqrt{#frac{S^{2}}{m_{gen}} + #frac{N^{2}}{m_{gen}^{2}} + C^{2}}")
+       label_fit.DrawLatex(0.3,0.8,"[0] + (x<[1])*([2]*(x-[1])*(x-[1])) + ")
+       label_fit.DrawLatex(0.3,0.75,"(x>[1])*([3]*(x-[1])*(x-[1]))")
 
-       label_fit.DrawLatex(0.3,0.65,"S=%.1lf #pm %.1lf"%(func.GetParameter(0),func.GetParError(0)))
-       label_fit.DrawLatex(0.3,0.6,"N=%.1lf #pm %.1lf"%(func.GetParameter(1),func.GetParError(1)))
-       label_fit.DrawLatex(0.3,0.55,"C=%.2lf #pm %.2lf"%(func.GetParameter(2),func.GetParError(2)))
-       if regions in ['BB']:
-          label_fit.DrawLatex(0.3,0.5,"L=%.1e #pm %.1e"%(func.GetParameter(3),func.GetParError(3)))
+       label_fit.DrawLatex(0.3,0.5,"[0]=%.1lf"%(func.GetParameter(0)))
+       label_fit.DrawLatex(0.3,0.45,"[1]=%.1lf"%(func.GetParameter(1)))
+       label_fit.DrawLatex(0.3,0.4,"[2]=%.2e"%(func.GetParameter(2)))
+       label_fit.DrawLatex(0.3,0.35,"[3]=%.2e"%(func.GetParameter(3)))
        label_fit.Draw()
        label =ROOT.TLatex(0.12,0.95,str("CMS Internal; Simulation"))
        label.SetNDC()
