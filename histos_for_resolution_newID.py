@@ -26,8 +26,8 @@ samples=[
     'ZToEE_NNPDF30_13TeV-powheg_M_1400_2300/crab_ZToEE_NNPDF30_13TeV-powheg_M_1400_2300_reHLT/161119_214824/0000/',
     'ZToEE_NNPDF30_13TeV-powheg_M_2300_3500/crab_ZToEE_NNPDF30_13TeV-powheg_M_2300_3500_reHLT/161119_215026/0000/',
     'ZToEE_NNPDF30_13TeV-powheg_M_3500_4500/crab_ZToEE_NNPDF30_13TeV-powheg_M_3500_4500_reHLT/161119_215251/0000/',
-    'ZToEE_NNPDF30_13TeV-powheg_M_4500_6000/crab_ZToEE_NNPDF30_13TeV-powheg_M_4500_6000_reHLT/161119_215703/0000/',
-    'ZToEE_NNPDF30_13TeV-powheg_M_6000_Inf/crab_ZToEE_NNPDF30_13TeV-powheg_M_6000_Inf_reHLT/161119_215841/0000/'
+    'ZToEE_NNPDF30_13TeV-powheg_M_4500_6000/crab_ZToEE_NNPDF30_13TeV-powheg_M_4500_6000_reHLT/161119_215703/0000/', #
+    'ZToEE_NNPDF30_13TeV-powheg_M_6000_Inf/crab_ZToEE_NNPDF30_13TeV-powheg_M_6000_Inf_reHLT/161119_215841/0000/' #
     ]
 
 for sample in samples:
@@ -139,9 +139,9 @@ class gsf_electron_from_tree:
                 setattr(self, var, getattr(tree,var)[index])
         #tree.gsf_px[index]
         #self.p4 = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_energy)
-        self.p4 = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_caloEnergy)
+        self.p4 = ROOT.TLorentzVector( self.gsf_px/self.gsf_energy*self.gsf_caloEnergy, self.gsf_py/self.gsf_energy*self.gsf_caloEnergy, self.gsf_pz/self.gsf_energy*self.gsf_caloEnergy, self.gsf_caloEnergy)
         self.charge = tree.gsf_charge[index]        
-        self.p4_supercluster = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_superClusterEnergy)#E is superClusterEnergy
+        self.p4_supercluster = ROOT.TLorentzVector( self.gsf_px/self.gsf_energy*self.gsf_superClusterEnergy, self.gsf_py/self.gsf_energy*self.gsf_superClusterEnergy, self.gsf_pz/self.gsf_energy*self.gsf_superClusterEnergy, self.gsf_superClusterEnergy)#E is superClusterEnergy
         self.p4_h_recover = ROOT.TLorentzVector( self.gsf_px, self.gsf_py, self.gsf_pz, self.gsf_energy + self.gsf_energy*self.gsf_hadronicOverEm)#adding the H component
         self.HoverE=self.gsf_hadronicOverEm
         self.HEEPID = HEEP_ID_70(tree,index)
