@@ -27,9 +27,6 @@ def main(argv):# defining the main function, called later
          global _t #defining a global variable _t
          _t=arg
 
-#def getResolution(mass):
-#   return res_scale*0.01*(sqrt(res_s*res_s/mass+res_n*res_n/mass/mass+res_c*res_c)+res_slope*mass)
-
 def getResolution(mass):
    parameters={}
    parameters['alphaL']={}
@@ -38,57 +35,59 @@ def getResolution(mass):
    parameters['sigma'] ={}
 
    #####alphaL BB
-   a_BB=1850
-   b_BB=2.2
+   a_BB=1400
+   b_BB=1.3
    c_BB=0.7
    d_BB=8.56e-9
    e_BB=0.24
    parameters['alphaL']['BB']=(mass<a_BB)*(pow(mass,-b_BB) -b_BB*pow(a_BB,-c_BB)) + (mass>a_BB)*d_BB*(mass-a_BB)*(mass-a_BB) +e_BB #power law + parabola
 
    #####alphaL BE
-   a_BE=3.9
-   b_BE=10
-   c_BE=0.17
-   d_BE=1.35e-5
+   a_BE=2.0
+   b_BE=0.
+   c_BE=0.2
+   d_BE=6.78e-6
    parameters['alphaL']['BE']=sqrt(a_BE*a_BE/mass + b_BE*b_BE/mass/mass + c_BE*c_BE) + d_BE*mass #resolution function with linear term
 
    #####alphaR BB
-   a_BB=1.3e-3
-   b_BB=2218
-   c_BB=1.1e-8
-   parameters['alphaR']['BB']=a_BB + c_BB*(mass-b_BB)*(mass-b_BB) #parabola
+   a_BB=1.29e-4
+   b_BB=1700
+   c_BB=2.24e-8
+   d_BB=8.61e-9
+   parameters['alphaR']['BB']=a_BB + (mass<b_BB)*c_BB*(mass-b_BB)*(mass-b_BB) + (mass>b_BB)*d_BB*(mass-b_BB)*(mass-b_BB) #asymmetric parabola
 
    #####alphaR BE
-   a_BE=2.27e-2
-   b_BE=2400
-   c_BE=-4.31e-9
-   parameters['alphaR']['BE']=a_BE + c_BE*(mass-b_BE)*(mass-b_BE) #parabola
+   a_BE=2.78e-2
+   b_BE=1300
+   c_BE=-1.90e-8
+   d_BE=-2.44e-9
+   parameters['alphaR']['BE']=a_BE + (mass<b_BE)*c_BE*(mass-b_BE)*(mass-b_BE) + (mass>b_BE)*d_BE*(mass-b_BE)*(mass-b_BE) #asymmetric parabola
 
    #####scale BB
    a_BB=1.
-   b_BB=814.8
-   c_BB=-4.1e-9
-   d_BB=-3.81e-10
+   b_BB=654.84
+   c_BB=-5.469e-9
+   d_BB=-4.279e-10
    parameters['scale']['BB']=a_BB + (mass<b_BB)*c_BB*(mass-b_BB)*(mass-b_BB) + (mass>b_BB)*d_BB*(mass-b_BB)*(mass-b_BB) #asymmetric parabola 
 
    #####scale BE
    a_BE=1.
-   b_BE=1388.8
-   c_BE=-5.07e-9
-   d_BE=2.5e-10
+   b_BE=1245.01
+   c_BE=-4.447e-9
+   d_BE=1.525e-10
    parameters['scale']['BE']=a_BE + (mass<b_BE)*c_BE*(mass-b_BE)*(mass-b_BE) + (mass>b_BE)*d_BE*(mass-b_BE)*(mass-b_BE) #asymmetric parabola
 
-   #####sigma BB
-   s_BB=11.2
-   n_BB=0.1
-   c_BB=0.86
-   l_BB=5.3e-5
+   #####resolution BB (sigma extra BB is already added in quadrature)
+   s_BB=10.3
+   n_BB=10
+   c_BB=0.87
+   l_BB=5.6e-5
    parameters['sigma']['BB']=(sqrt(s_BB*s_BB/mass + n_BB*n_BB/mass/mass + c_BB*c_BB) + l_BB*mass)*0.01 #resolution function with linear term
 
-   #####sigma BE
-   s_BE=16.6
+   #####resolution BE (sigma extra BE is already added in quadrature)
+   s_BE=14.5
    n_BE=10
-   c_BE=1.5
+   c_BE=1.49
    parameters['sigma']['BE']=(sqrt(s_BE*s_BE/mass + n_BE*n_BE/mass/mass + c_BE*c_BE))*0.01 #resolution function w/o linear term
 
 
@@ -136,18 +135,24 @@ for regions in ['BB','BE']:
         dh.plotOn(frame)  
         
         #Set Cruijff parameters
-        alpha=ROOT.RooRealVar("alpha","alpha",getResolution(mass_point)['alphaL'][regions],0.,0.5) 
-        alphaR=ROOT.RooRealVar("alphaR","alphaR",getResolution(mass_point)['alphaR'][regions],0.,0.5)
-        mean=ROOT.RooRealVar("mean","mean",(getResolution(mass_point)['scale'][regions] -1),0.9, 1.1) #-1
+        alpha=ROOT.RooRealVar("alpha","alpha",getResolution(mass_point)['alphaL'][regions],getResolution(mass_point)['alphaL'][regions],getResolution(mass_point)['alphaL'][regions]) 
+        alphaR=ROOT.RooRealVar("alphaR","alphaR",getResolution(mass_point)['alphaR'][regions],getResolution(mass_point)['alphaR'][regions],getResolution(mass_point)['alphaR'][regions])
+        mean=ROOT.RooRealVar("mean","mean",(getResolution(mass_point)['scale'][regions] -1.),(getResolution(mass_point)['scale'][regions] -1.), (getResolution(mass_point)['scale'][regions] -1.)) #-1
+        #mean=ROOT.RooRealVar("mean","mean",(getResolution(mass_point)['scale'][regions] -1.),-0.01, +0.01) #-1
         sigma_extra={}
+        #I don't like sigma_extra hard-coded (read them from the file)
         sigma_extra['BB']=0.00814
         sigma_extra['BE']=0.01257
         res=getResolution(mass_point)['sigma'][regions]
-        sigma=ROOT.RooRealVar("sigma","sigma",sqrt(res*res - sigma_extra[regions]*sigma_extra[regions]),0.,0.05) #difference in quadrature sigma extra
+        sigma=ROOT.RooRealVar("sigma","sigma",sqrt(res*res - sigma_extra[regions]*sigma_extra[regions]),sqrt(res*res - sigma_extra[regions]*sigma_extra[regions]),sqrt(res*res - sigma_extra[regions]*sigma_extra[regions])) #difference in quadrature sigma extra
+        #sigma_init=sqrt(res*res - sigma_extra[regions]*sigma_extra[regions])
+        #sigma=ROOT.RooRealVar("sigma","sigma",sigma_init,sigma_init -0.01, sigma_init +0.01) #-1
+        
 
         cball=RooCruijff("cruijff", "cruijff",x,mean,sigma,sigma,alpha, alphaR)
+        cball.fitTo(dh) #-->if you want to have a free parameter
         cball.plotOn(frame, RooFit.LineColor(ROOT.kRed))
-        c = ROOT.TCanvas("fit","fit",800,800) #X length, Y length
+        c = ROOT.TCanvas("check fit","check fit",800,800) #X length, Y length
         c.cd()
         frame.Draw() 
 
