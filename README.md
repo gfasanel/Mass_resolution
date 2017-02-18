@@ -49,12 +49,15 @@ source job_submission/submit_sigma_extra_G.sh 38
 source job_submission/submit_sigma_extra_H.sh 123
 source job_submission/submit_sigma_extra_MC.sh 5
 
-[gfasanel@m6 Mass_resolution_study]$ source job_submission/submit_sigma_extra_F.sh 16
 ##stessa cosa per il MC
 #source job_submission/submit_sigma_extra_MC.sh 5
 
 #Controllare lo stato dei job: source job_submission/checker.sh
 
+#Nel caso vuoi killare:
+[gfasanel@m6 Mass_resolution_study]$ source job_submission/checker.sh >jobs.dat
+[gfasanel@m6 Mass_resolution_study]$ emacs jobs.dat
+[gfasanel@m6 Mass_resolution_study]$ python killjobs.py
 
 ####HADD ALL ROOT FILES
 source hadder.sh
@@ -97,14 +100,18 @@ h_resolution_BB_1->GetEntries()
 cd roofit/
 #python cb_fitter.py -t resolution > fit_results/resolution_results.txt
 #Oppure, meglio
-cruijff_fitter.py -t resolution > fit_results/resolution_results_cruijf.txt
+python cruijff_fitter.py -t resolution > fit_results/resolution_results_cruijf.txt
 # with -t resolution you write all the parameters of the cb (or dCB), including the scale file (fitted scale vs mass bins)
 cd ..
 #Make the plot of the fitted parameters vs mass (the -t parameter specify the name of the dat file to plot)
-python res_scale_plotter.py -t resolution
-python res_scale_plotter_alphaL.py -t alphaL
-python res_scale_plotter_alphaR.py -t alphaR
-python res_scale_plotter_scale.py -t scale
+python res_scale_plotter_generic.py -t resolution
+python res_scale_plotter_generic.py -t scale
+python res_scale_plotter_generic.py -t alphaL
+python res_scale_plotter_generic.py -t alphaR
+#python res_scale_plotter.py -t resolution
+#python res_scale_plotter_alphaL.py -t alphaL
+#python res_scale_plotter_alphaR.py -t alphaR
+#python res_scale_plotter_scale.py -t scale
 
 #Test the parametrizations
 python plot_cruijiff.py -t resolution
